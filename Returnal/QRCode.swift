@@ -31,7 +31,7 @@ struct QRCode: View {
     }
 
     private func generateQRCode(uuid: UUID) -> UIImage? {
-        let combined = "\(bundleIdentifier)_\(uuid.uuidString)"
+        let combined = "returnal://open?uuid=\(uuid)"
         let data = Data(combined.utf8)
 
         let filter = CIFilter.qrCodeGenerator()

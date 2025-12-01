@@ -69,7 +69,7 @@ struct AssignBorrowerView: View {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: Borrower.self, configurations: config)
         let example = Borrower(firstName: "", lastName: "")
-        return AssignBorrowerView(item: Item(name: "Kneifzange"))
+        return AssignBorrowerView(item: Item(name: "Kneifzange", debtor: example))
             .modelContainer(container)
     } catch {
         return Text("Failed to create preview: \(error.localizedDescription)")

@@ -9,6 +9,9 @@ import SwiftData
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject private var router: DeepLinkRouter
+    
+    @State private var path: [Item] = []
     
     @State private var addItemIsPresented: Bool = false
     @State private var searchText: String = ""
@@ -19,7 +22,7 @@ struct ContentView: View {
     
     var body: some View {
      
-        NavigationStack {
+        NavigationStack(path: $path) {
             VStack {
                 List {
                     ForEach(items) { item in
@@ -33,7 +36,13 @@ struct ContentView: View {
             .navigationDestination(for: Item.self) { item in
                 ItemDetailsView(for: item)
             }
-            .toolbar {                
+            .onChange(of: router.targetUUID) { _, newValue in
+                guard let uuid = newValue else { return }
+                if let match = items.first(where: { $0.id == uuid}) {
+                    path = [match]
+                }
+            }
+            .toolbar {
                 ToolbarItem {
                     Button {
                         
