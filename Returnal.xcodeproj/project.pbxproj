@@ -6,8 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		EED126BE2EDE40900095DC42 /* readme.md in Resources */ = {isa = PBXBuildFile; fileRef = EED126BD2EDE40900095DC42 /* readme.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		EED1267E2EDD8A060095DC42 /* Returnal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Returnal.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EED126BD2EDE40900095DC42 /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -45,6 +50,7 @@
 		EED126752EDD8A060095DC42 = {
 			isa = PBXGroup;
 			children = (
+				EED126BD2EDE40900095DC42 /* readme.md */,
 				EED126802EDD8A060095DC42 /* Returnal */,
 				EED1267F2EDD8A060095DC42 /* Products */,
 			);
@@ -122,6 +128,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EED126BE2EDE40900095DC42 /* readme.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
