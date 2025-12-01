@@ -28,10 +28,18 @@ struct ItemDetailsView: View {
                 Divider()
                 
                 if let debtor = item.debtor {
-                    VStack(alignment: .leading) {
-                        Text("Verliehen an:")
-                            .font(.caption)
-                        Text("\(debtor.firstName) \(debtor.lastName)")
+                    HStack(alignment: .top , spacing: 16) {
+                        VStack(alignment: .leading) {
+                            Text("Verliehen an:")
+                                .font(.caption)
+                            Text("\(debtor.firstName) \(debtor.lastName)")
+                        }
+                        Spacer()
+                        VStack(alignment: .leading) {
+                            Text("Verliehen am:")
+                                .font(.caption)
+                            Text("\(debtor.dateOfBorrowing.formatted(date: .long, time: .omitted))")
+                        }
                     }
                     Divider()
                 }

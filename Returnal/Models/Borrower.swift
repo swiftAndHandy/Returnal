@@ -13,10 +13,12 @@ class Borrower {
     var firstName: String
     var lastName: String
     var address: Address?
+    var dateOfBorrowing: Date
     
     init(firstName: String, lastName: String, address: Address? = nil) {
         self.firstName = firstName
         self.lastName = lastName
         self.address = address
+        self.dateOfBorrowing = .now
     }
 }
