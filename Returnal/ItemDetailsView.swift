@@ -69,7 +69,6 @@ struct ItemDetailsView: View {
             case false:
                 Button {
                     burrowSheetIsPresented.toggle()
-                    item.debtor = Borrower(firstName: "Kevin", lastName: "Chromik")
                 } label: {
                     HStack(spacing: 4) {
                         Text("Verleihen")
@@ -81,7 +80,7 @@ struct ItemDetailsView: View {
             }
         }
         .sheet(isPresented: $burrowSheetIsPresented) {
-            
+            AssignBorrowerView(item: item)
         }
     }
     
