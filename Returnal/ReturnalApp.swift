@@ -5,6 +5,7 @@
 //  Created by Andre Veltens on 01.12.25.
 //
 
+import SwiftData
 import SwiftUI
 
 @main
@@ -13,5 +14,6 @@ struct ReturnalApp: App {
         WindowGroup {
             ContentView()
         }
+        .modelContainer(for: Item.self)
     }
 }
