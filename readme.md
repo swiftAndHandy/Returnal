@@ -15,7 +15,7 @@ Dank Returnal weißt du immer, wo dein Zeug ist.
 
 ## Wieso heißt Returnal eigentlich Returnal?
 Es handelt sich dabei um eine Kombination verschiedener Wörter:
-"to return something" und 
--> eternal -> dein Zeug wird ab sofort immer/ewig zu dir zurückkehren.
+"to return something" und <br>
+-> eternal -> dein Zeug wird ab sofort immer/ewig zu dir zurückkehren.<br>
 -> journal -> du führst Journal/Buch über deine Leihgaben.  
 
