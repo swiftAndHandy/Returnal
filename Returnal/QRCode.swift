@@ -11,6 +11,7 @@ import CoreImage.CIFilterBuiltins
 struct QRCode: View {
     let bundleIdentifier: String = Bundle.main.bundleIdentifier ?? "unknown"
     let uuid: UUID
+    let size: CGFloat?
 
     var body: some View {
         if let image = generateQRCode(uuid: uuid) {
@@ -18,13 +19,15 @@ struct QRCode: View {
                 .interpolation(.none)
                 .resizable()
                 .scaledToFit()
+                .frame(width: size, height: size)
         } else {
             Text("QR konnte nicht erzeugt werden.")
         }
     }
-    
-    init(for uuid: UUID) {
+
+    init(for uuid: UUID, size: CGFloat? = nil) {
         self.uuid = uuid
+        self.size = size
     }
 
     private func generateQRCode(uuid: UUID) -> UIImage? {
@@ -36,20 +39,15 @@ struct QRCode: View {
         filter.setValue("M", forKey: "inputCorrectionLevel")
 
         let transform = CGAffineTransform(scaleX: 10, y: 10)
-        
         guard let outputImage = filter.outputImage?.transformed(by: transform) else {
-            print("failed to generate qr code")
             return nil
         }
 
         let context = CIContext()
         if let cgImage = context.createCGImage(outputImage, from: outputImage.extent) {
-            print("\(combined)")
             return UIImage(cgImage: cgImage)
-        } else {
-            return nil
         }
-        
+        return nil
     }
 }
 

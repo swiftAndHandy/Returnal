@@ -13,7 +13,7 @@ struct AddItemView: View {
     @Environment(\.dismiss) var dismiss
     
     @State private var itemName: String = ""
-    @State private var itemDescription: String = "Farbe, Größe, Zustand etc."
+    @State private var itemDescription: String = ""
     
     
     var body: some View {
@@ -24,6 +24,7 @@ struct AddItemView: View {
                 }
                 Section("Ergänzende Angaben") {
                     TextEditor(text: $itemDescription)
+                        .padding(.vertical, 2)
                 }
             }
             .navigationTitle("Neuer Gegenstand")
@@ -38,9 +39,7 @@ struct AddItemView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button {
-                        let newItem = Item(name: itemName, details: itemDescription)
-                        modelContext.insert(newItem)
-                        
+                        saveItem()
                     } label: {
                         Label("Speichern", systemImage: "checkmark")
                     }
@@ -52,6 +51,15 @@ struct AddItemView: View {
     
     func saveDisabled() -> Bool {
         return itemName.trimmingCharacters(in: .whitespaces).count < 3
+    }
+    
+    func saveItem() {
+        let trimmedName = itemName.trimmingCharacters(in: .whitespaces)
+        let trimmedDescription: String? = itemDescription.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        let newItem = Item(name: trimmedName, details: trimmedDescription)
+        modelContext.insert(newItem)
+        dismiss()
     }
 }
 
