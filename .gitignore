@@ -1,0 +1,4 @@
+# XCode User Interface State
+*.xcuserstate
+xcuserdata/
+*.DS_Store

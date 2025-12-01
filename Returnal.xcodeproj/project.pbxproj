@@ -8,11 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		EED126BE2EDE40900095DC42 /* readme.md in Resources */ = {isa = PBXBuildFile; fileRef = EED126BD2EDE40900095DC42 /* readme.md */; };
+		EEFB34DB2EDE5FCB004F8452 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = EEFB34DA2EDE5FC4004F8452 /* .gitignore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		EED1267E2EDD8A060095DC42 /* Returnal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Returnal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EED126BD2EDE40900095DC42 /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
+		EEFB34DA2EDE5FC4004F8452 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -51,6 +53,7 @@
 			isa = PBXGroup;
 			children = (
 				EED126BD2EDE40900095DC42 /* readme.md */,
+				EEFB34DA2EDE5FC4004F8452 /* .gitignore */,
 				EED126802EDD8A060095DC42 /* Returnal */,
 				EED1267F2EDD8A060095DC42 /* Products */,
 			);
@@ -128,6 +131,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EEFB34DB2EDE5FCB004F8452 /* .gitignore in Resources */,
 				EED126BE2EDE40900095DC42 /* readme.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
