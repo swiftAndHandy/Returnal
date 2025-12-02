@@ -24,10 +24,23 @@ struct AssignBorrowerView: View {
                     TextField("Vorname", text: $borrower.firstName)
                     TextField("Nachname", text: $borrower.lastName)
                 }
+                Section("Kontakt (optional)") {
+                    TextField("Telefon", text: $borrower.phoneNumber)
+                    .keyboardType(.phonePad)
+                    TextField("E-Mail", text: $borrower.email)
+                    .keyboardType(.emailAddress)
+                }
                 Section("Adresse (optional)") {
-                    
+                    TextField("Straße", text: $borrower.address.street)
+                    HStack {
+                        TextField("PLZ", text: $borrower.address.zipCode)
+                        .keyboardType(.numberPad)
+                        TextField("Ort", text: $borrower.address.city)
+                    }
+                    TextField("Land", text: $borrower.address.country)
                 }
             }
+            .scrollBounceBehavior(.basedOnSize)
             .navigationTitle("Entleiher zuweisen")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -57,8 +70,15 @@ struct AssignBorrowerView: View {
     func saveBorrower() {
         let trimmedFirstName = borrower.firstName.trimmingCharacters(in: .whitespaces)
         let trimmedLastName = borrower.lastName.trimmingCharacters(in: .whitespaces)
+        let trimmedPhoneNumber = borrower.phoneNumber.trimmingCharacters(in: .whitespaces)
+        let trimmedEMail = borrower.email.trimmingCharacters(in: .whitespaces)
         
-        item.debtor = Borrower(firstName: trimmedFirstName, lastName: trimmedLastName)
+        let trimmedStreet = borrower.address.street.trimmingCharacters(in: .whitespaces)
+        let trimmedZIPCode = borrower.address.zipCode.trimmingCharacters(in: .whitespaces)
+        let trimmedCity = borrower.address.city.trimmingCharacters(in: .whitespaces)
+        let trimmedCountry = borrower.address.country.trimmingCharacters(in: .whitespaces)
+        
+        item.debtor = Borrower(firstName: trimmedFirstName, lastName: trimmedLastName, phoneNumber: trimmedPhoneNumber, email: trimmedEMail, address: Address(street: trimmedStreet, zipCode: trimmedZIPCode, city: trimmedCity, country: trimmedCountry))
         
         dismiss()
     }

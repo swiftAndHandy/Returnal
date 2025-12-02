@@ -12,13 +12,19 @@ import SwiftData
 class Borrower {
     var firstName: String
     var lastName: String
-    var address: Address?
+    
+    var phoneNumber: String
+    var email: String
+    
+    var address: Address
     var dateOfBorrowing: Date
     
-    init(firstName: String, lastName: String, address: Address? = nil) {
+    init(firstName: String, lastName: String, phoneNumber: String = "", email: String = "", address: Address = Address()) {
         self.firstName = firstName
         self.lastName = lastName
         self.address = address
         self.dateOfBorrowing = .now
+        self.phoneNumber = phoneNumber
+        self.email = email
     }
 }

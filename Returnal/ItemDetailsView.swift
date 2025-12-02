@@ -46,6 +46,11 @@ struct ItemDetailsView: View {
                             Text("Verliehen an:")
                                 .font(.caption)
                             Text("\(debtor.firstName) \(debtor.lastName)")
+                            HStack {
+                                Text("\(debtor.address.zipCode)")
+                                Text("\(debtor.address.city)")
+                            }
+                            Divider()
                         }
                         Spacer()
                         VStack(alignment: .leading) {
