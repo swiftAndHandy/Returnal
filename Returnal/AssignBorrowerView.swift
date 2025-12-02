@@ -24,6 +24,7 @@ struct AssignBorrowerView: View {
                     TextField("Vorname", text: $borrower.firstName)
                     TextField("Nachname", text: $borrower.lastName)
                 }
+                
                 Section("Kontakt (optional)") {
                     TextField("Telefon", text: Binding(
                         get: { borrower.phoneNumber ?? "" },
@@ -35,6 +36,7 @@ struct AssignBorrowerView: View {
                         set: { borrower.email = $0 }
                     ))
                     .keyboardType(.emailAddress)
+                    .textInputAutocapitalization(.never)
                 }
                 Section("Adresse (optional)") {
                     TextField("Straße", text: Binding(
@@ -58,6 +60,7 @@ struct AssignBorrowerView: View {
                     ))
                 }
             }
+            .autocorrectionDisabled()
             .scrollBounceBehavior(.basedOnSize)
             .navigationTitle("Entleiher zuweisen")
             .navigationBarTitleDisplayMode(.inline)
