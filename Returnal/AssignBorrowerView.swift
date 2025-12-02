@@ -14,7 +14,7 @@ struct AssignBorrowerView: View {
     
     var item: Item
     
-    @State private var borrower: Borrower = Borrower(firstName: "", lastName: "")
+    @State private var borrower: Borrower = Borrower(firstName: "", lastName: "", address: Address())
     
     
     var body: some View {
@@ -25,19 +25,37 @@ struct AssignBorrowerView: View {
                     TextField("Nachname", text: $borrower.lastName)
                 }
                 Section("Kontakt (optional)") {
-                    TextField("Telefon", text: $borrower.phoneNumber)
+                    TextField("Telefon", text: Binding(
+                        get: { borrower.phoneNumber ?? "" },
+                        set: { borrower.phoneNumber = $0 }
+                    ))
                     .keyboardType(.phonePad)
-                    TextField("E-Mail", text: $borrower.email)
+                    TextField("E-Mail", text: Binding(
+                        get: { borrower.email ?? "" },
+                        set: { borrower.email = $0 }
+                    ))
                     .keyboardType(.emailAddress)
                 }
                 Section("Adresse (optional)") {
-                    TextField("Straße", text: $borrower.address.street)
+                    TextField("Straße", text: Binding(
+                        get: { borrower.address?.street ?? "" },
+                        set: { borrower.address?.street = $0 }
+                    ))
                     HStack {
-                        TextField("PLZ", text: $borrower.address.zipCode)
+                        TextField("PLZ", text: Binding(
+                            get: { borrower.address?.zipCode ?? "" },
+                            set: { borrower.address?.zipCode = $0 }
+                        ))
                         .keyboardType(.numberPad)
-                        TextField("Ort", text: $borrower.address.city)
+                        TextField("Ort", text: Binding(
+                            get: { borrower.address?.city ?? "" },
+                            set: { borrower.address?.city = $0 }
+                        ))
                     }
-                    TextField("Land", text: $borrower.address.country)
+                    TextField("Land", text: Binding(
+                        get: { borrower.address?.country ?? "" },
+                        set: { borrower.address?.country = $0 }
+                    ))
                 }
             }
             .scrollBounceBehavior(.basedOnSize)
@@ -70,15 +88,24 @@ struct AssignBorrowerView: View {
     func saveBorrower() {
         let trimmedFirstName = borrower.firstName.trimmingCharacters(in: .whitespaces)
         let trimmedLastName = borrower.lastName.trimmingCharacters(in: .whitespaces)
-        let trimmedPhoneNumber = borrower.phoneNumber.trimmingCharacters(in: .whitespaces)
-        let trimmedEMail = borrower.email.trimmingCharacters(in: .whitespaces)
         
-        let trimmedStreet = borrower.address.street.trimmingCharacters(in: .whitespaces)
-        let trimmedZIPCode = borrower.address.zipCode.trimmingCharacters(in: .whitespaces)
-        let trimmedCity = borrower.address.city.trimmingCharacters(in: .whitespaces)
-        let trimmedCountry = borrower.address.country.trimmingCharacters(in: .whitespaces)
+        let trimmedPhoneNumber = borrower.phoneNumber?.trimmingCharacters(in: .whitespaces)
+        let trimmedEMail = borrower.email?.trimmingCharacters(in: .whitespaces)
         
-        item.debtor = Borrower(firstName: trimmedFirstName, lastName: trimmedLastName, phoneNumber: trimmedPhoneNumber, email: trimmedEMail, address: Address(street: trimmedStreet, zipCode: trimmedZIPCode, city: trimmedCity, country: trimmedCountry))
+        let trimmedStreet = borrower.address?.street?.trimmingCharacters(in: .whitespaces)
+        let trimmedZIPCode = borrower.address?.zipCode?.trimmingCharacters(in: .whitespaces)
+        let trimmedCity = borrower.address?.city?.trimmingCharacters(in: .whitespaces)
+        let trimmedCountry = borrower.address?.country?.trimmingCharacters(in: .whitespaces)
+        
+        var address: Address?
+        
+        if trimmedStreet == nil && trimmedZIPCode == nil && trimmedCity == nil && trimmedCountry == nil {
+            address = nil
+        } else {
+            address = Address(street: trimmedStreet, zipCode: trimmedZIPCode, city: trimmedCity, country: trimmedCountry)
+        }
+          
+        item.debtor = Borrower(firstName: trimmedFirstName, lastName: trimmedLastName, phoneNumber: trimmedPhoneNumber, email: trimmedEMail, address: address)
         
         dismiss()
     }

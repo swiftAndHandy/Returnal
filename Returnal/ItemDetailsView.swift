@@ -46,11 +46,13 @@ struct ItemDetailsView: View {
                             Text("Verliehen an:")
                                 .font(.caption)
                             Text("\(debtor.firstName) \(debtor.lastName)")
-                            HStack {
-                                Text("\(debtor.address.zipCode)")
-                                Text("\(debtor.address.city)")
+                            if let address = debtor.address {
+                                Divider()
+                                HStack {
+                                    Text("\(address.zipCode ?? "")")
+                                    Text("\(address.city ?? "")")
+                                }
                             }
-                            Divider()
                         }
                         Spacer()
                         VStack(alignment: .leading) {

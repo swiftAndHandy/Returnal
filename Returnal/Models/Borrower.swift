@@ -13,13 +13,13 @@ class Borrower {
     var firstName: String
     var lastName: String
     
-    var phoneNumber: String
-    var email: String
+    var phoneNumber: String?
+    var email: String?
     
-    var address: Address
+    var address: Address?
     var dateOfBorrowing: Date
     
-    init(firstName: String, lastName: String, phoneNumber: String = "", email: String = "", address: Address = Address()) {
+    init(firstName: String, lastName: String, phoneNumber: String? = nil, email: String? = nil, address: Address? = nil) {
         self.firstName = firstName
         self.lastName = lastName
         self.address = address

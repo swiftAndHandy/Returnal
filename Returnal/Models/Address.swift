@@ -10,12 +10,12 @@ import SwiftData
 
 @Model
 class Address {
-    var street: String
-    var zipCode: String
-    var city: String
-    var country: String
+    var street: String?
+    var zipCode: String?
+    var city: String?
+    var country: String?
     
-    init(street: String = "", zipCode: String = "" , city: String = "", country: String = "") {
+    init(street: String? = nil, zipCode: String? = nil , city: String? = nil, country: String? = nil) {
         self.street = street
         self.zipCode = zipCode
         self.city = city
