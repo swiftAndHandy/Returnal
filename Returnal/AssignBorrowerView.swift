@@ -43,6 +43,7 @@ struct AssignBorrowerView: View {
                         get: { borrower.address?.street ?? "" },
                         set: { borrower.address?.street = $0 }
                     ))
+                    .textInputAutocapitalization(.words)
                     HStack {
                         TextField("PLZ", text: Binding(
                             get: { borrower.address?.zipCode ?? "" },
@@ -53,6 +54,7 @@ struct AssignBorrowerView: View {
                             get: { borrower.address?.city ?? "" },
                             set: { borrower.address?.city = $0 }
                         ))
+                        .autocapitalization(.words)
                     }
                     TextField("Land", text: Binding(
                         get: { borrower.address?.country ?? "" },
