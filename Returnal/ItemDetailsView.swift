@@ -10,9 +10,10 @@ import SwiftUI
 
 
 struct ItemDetailsView: View {
-    @Bindable var item: Item
-    @State var burrowSheetIsPresented: Bool = false
-    @State var editModeisActice: Bool = false
+    @Bindable private var item: Item
+    @State private var burrowSheetIsPresented: Bool = false
+    @State private var editModeisActice: Bool = false
+    @FocusState private var descriptionIsFocused: Bool
     
     @State var newDescription: String
     
@@ -28,13 +29,15 @@ struct ItemDetailsView: View {
                 if editModeisActice {
                     HStack {
                         TextEditor(text: $newDescription)
+                            .focused($descriptionIsFocused)
                             .font(.caption)
-                            .frame(minHeight: 40)
+                            .frame(minHeight: 30)
                             .scrollBounceBehavior(.basedOnSize)
                         HStack {
                             Button {
                                 newDescription = item.details ?? ""
                                 editModeisActice = false
+                                descriptionIsFocused = false
                             } label: {
                                 Label("Verwerfen", systemImage: "multiply")
                                     .labelStyle(.iconOnly)
@@ -44,6 +47,7 @@ struct ItemDetailsView: View {
                                 item.details = newDescription
                                 try? modelContext.save()
                                 editModeisActice = false
+                                descriptionIsFocused = false
                             } label: {
                                 Label("Speichern", systemImage: "checkmark")
                                     .labelStyle(.iconOnly)
@@ -52,13 +56,15 @@ struct ItemDetailsView: View {
                         }
                     }
                     .padding(.vertical, 2)
-                    .background(.red)
                 } else {
                     HStack {
                         Text(item.details ?? "Keine Beschreibung verfügbar.")
                             .font(.caption)
                         if item.debtor == nil {
-                            Button { editModeisActice = true } label: {
+                            Button {
+                                editModeisActice = true
+                                descriptionIsFocused = true
+                            } label: {
                                 Label("", systemImage: "pencil.circle")
                                     .foregroundStyle(.primary)
                                     .font(.headline)
@@ -101,6 +107,7 @@ struct ItemDetailsView: View {
                         }
                         if debtor.email != nil || debtor.phoneNumber != nil {
                             Divider()
+                                .padding(.bottom)
                             if let email = debtor.email {
                                 HStack {
                                     Text("E-Mail:")
