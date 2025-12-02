@@ -50,7 +50,7 @@ struct ItemDetailsView: View {
                         .font(.caption)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     HStack {
-                        QRCode(for: item.id, size: 150)
+                        QRCodeView(for: item.id, size: 150)
                         VStack {
                             Text("ID: \n\(item.id)")
                         }

@@ -2,35 +2,14 @@
 //  QRCode.swift
 //  Returnal
 //
-//  Created by Andre Veltens on 01.12.25.
+//  Created by Andre Veltens on 02.12.25.
 //
 
 import SwiftUI
 import CoreImage.CIFilterBuiltins
 
-struct QRCode: View {
-    let bundleIdentifier: String = Bundle.main.bundleIdentifier ?? "unknown"
-    let uuid: UUID
-    let size: CGFloat?
-
-    var body: some View {
-        if let image = generateQRCode(uuid: uuid) {
-            Image(uiImage: image)
-                .interpolation(.none)
-                .resizable()
-                .scaledToFit()
-                .frame(width: size, height: size)
-        } else {
-            Text("QR konnte nicht erzeugt werden.")
-        }
-    }
-
-    init(for uuid: UUID, size: CGFloat? = nil) {
-        self.uuid = uuid
-        self.size = size
-    }
-
-    private func generateQRCode(uuid: UUID) -> UIImage? {
+struct QRCode {
+    static func drawCode(uuid: UUID) -> UIImage? {
         let combined = "returnal://open?uuid=\(uuid)"
         let data = Data(combined.utf8)
 
@@ -49,9 +28,4 @@ struct QRCode: View {
         }
         return nil
     }
-}
-
-
-#Preview {
-    QRCode(for: UUID())
 }
