@@ -24,32 +24,15 @@ struct ContentView: View {
         items
     }
     
+    @State private var itemType = Item.types.first
     var body: some View {
      
         NavigationStack(path: $qrCodePath) {
             VStack {
                 if items.isEmpty {
-                    ContentUnavailableView(
-                        label: {
-                            Label("Keine Einträge vorhanden", systemImage: "shippingBox")
-                        },
-                        description: {
-                            Button {
-                                addItemIsPresented = true
-                            } label: {
-                                Text("Füge deinen ersten Gegenstand hinzu.")
-                            }
-                        }
-                    )
+                    NoItemsView(addItemIsPresented: $addItemIsPresented)
                 } else if filteredItems.isEmpty {
-                    ContentUnavailableView(
-                        label: {
-                            Label("Keine Suchergebnisse", systemImage: "magnifyingglass")
-                        },
-                        description: {
-                            Text("Der aktuelle Filter liefert keine Ergebnisse.")
-                        }
-                    )
+                    NoFilteredItemsView()
                 } else {
                     List {
                         ForEach(filteredItems) { item in
@@ -62,6 +45,7 @@ struct ContentView: View {
                             }
                         }
                     }
+                    Text(itemType ?? "nil")
                 }
             }
             .navigationTitle("Übersicht")
@@ -81,12 +65,17 @@ struct ContentView: View {
             }
             .toolbar {
                 ToolbarItem {
-                    Button {
-                        
-                    } label: {
-                        Label("Filtern", systemImage: "line.3.horizontal.decrease")
+                    Menu("Filter", systemImage: "line.3.horizontal.decrease") {
+                        Picker("Filter", selection: $itemType) {
+                            ForEach(Item.types, id: \.self) { type in
+                                Text(type)
+                                    .tag(type)
+                            }
+                        }
                     }
                 }
+                
+                
                 ToolbarItem {
                     Button {
                         addItemIsPresented = true

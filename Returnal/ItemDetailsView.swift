@@ -30,7 +30,6 @@ struct ItemDetailsView: View {
                     HStack {
                         TextEditor(text: $newDescription)
                             .focused($descriptionIsFocused)
-                            .font(.caption)
                             .frame(minHeight: 30)
                             .scrollBounceBehavior(.basedOnSize)
                         HStack {
@@ -59,7 +58,6 @@ struct ItemDetailsView: View {
                 } else {
                     HStack {
                         Text(item.details ?? "Keine Beschreibung verfügbar.")
-                            .font(.caption)
                         if item.debtor == nil {
                             Button {
                                 editModeisActice = true

@@ -13,8 +13,9 @@ class Item: Identifiable {
     var id: UUID
     var name: String
     var details: String?
-    
     var debtor: Borrower?
+    
+    static let types = ["Alle", "Verliehen", "Vorrätig"]
     
     init(name: String, details: String? = nil, debtor: Borrower? = nil) {
         self.id = UUID()
