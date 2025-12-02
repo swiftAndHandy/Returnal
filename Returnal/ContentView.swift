@@ -27,7 +27,11 @@ struct ContentView: View {
                 List {
                     ForEach(items) { item in
                         NavigationLink(value: item) {
-                            Text("Item: \(item.name)")
+                            Text("\(item.name)")
+                            if let _ = item.debtor {
+                                Text("(verliehen)")
+                                    .foregroundStyle(.red)
+                            }
                         }
                     }
                 }

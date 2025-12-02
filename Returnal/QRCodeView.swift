@@ -8,28 +8,25 @@
 import SwiftUI
 
 struct QRCodeView: View {
-    let uuid: UUID
     let size: CGFloat?
+    let uiImage: UIImage
 
     var body: some View {
-        if let image = QRCode.drawCode(uuid: uuid) {
-            Image(uiImage: image)
-                .interpolation(.none)
-                .resizable()
-                .scaledToFit()
-                .frame(width: size, height: size)
-        } else {
-            Text("QR konnte nicht erzeugt werden.")
-        }
+        Image(uiImage: uiImage)
+            .interpolation(.none)
+            .resizable()
+            .scaledToFit()
+            .frame(width: size, height: size)
     }
 
-    init(for uuid: UUID, size: CGFloat? = nil) {
-        self.uuid = uuid
+    init(for qrCode: UIImage, size: CGFloat? = nil) {
+        self.uiImage = qrCode
         self.size = size
     }
 }
 
 
 #Preview {
-    QRCodeView(for: UUID())
+    let qrCode = QRCode.drawCode(uuid: UUID())
+    QRCodeView(for: qrCode ?? UIImage())
 }

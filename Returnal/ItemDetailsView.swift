@@ -50,9 +50,14 @@ struct ItemDetailsView: View {
                         .font(.caption)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     HStack {
-                        QRCodeView(for: item.id, size: 150)
-                        VStack {
-                            Text("ID: \n\(item.id)")
+                        let uiImage = QRCode.drawCode(uuid: item.id)
+                        if let qrCode = uiImage {
+                            QRCodeView(for: qrCode, size: 150)
+                            VStack {
+                                Text("ID: \n\(item.id)")
+                            }
+                        } else {
+                            
                         }
                     }
                 }
