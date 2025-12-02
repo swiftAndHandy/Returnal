@@ -55,9 +55,15 @@ struct AddItemView: View {
     
     func saveItem() {
         let trimmedName = itemName.trimmingCharacters(in: .whitespaces)
-        let trimmedDescription: String? = itemDescription.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmedDescription: String = itemDescription.trimmingCharacters(in: .whitespacesAndNewlines)
+        var newItem: Item
         
-        let newItem = Item(name: trimmedName, details: trimmedDescription)
+        if trimmedDescription.count > 0 {
+            newItem = Item(name: trimmedName, details: trimmedDescription)
+        } else {
+            newItem = Item(name: trimmedName, details: nil)
+        }
+    
         modelContext.insert(newItem)
         dismiss()
     }

@@ -13,6 +13,7 @@ struct ItemDetailsView: View {
     @State var item: Item
     @State var editItemIsPresented: Bool = false
     @State var burrowSheetIsPresented: Bool = false
+    @State var editModeisActice: Bool = false
     
     var body: some View {
         ScrollView {
@@ -21,9 +22,21 @@ struct ItemDetailsView: View {
                     .font(.largeTitle.bold())
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
+                if editModeisActice {
+                    
+                } else {
+                    HStack {
+                        Text(item.details ?? "Keine Beschreibung verfügbar.")
+                            .font(.caption)
+                        Button { } label: {
+                            Label("", systemImage: "pencil.circle")
+                                .foregroundStyle(.primary)
+                                .font(.headline)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
                 
-                Text(item.details ?? "Keine Beschreibung verfügbar.")
-                    .font(.caption)
                 
                 Divider()
                 
@@ -67,28 +80,30 @@ struct ItemDetailsView: View {
         }
         .scrollBounceBehavior(.basedOnSize)
         .toolbar {
-            switch isBorrowed() {
-                case true:
-                Button {
-                    item.debtor = nil
-                } label: {
-                    HStack(spacing: 4) {
-                        Text("Erhalt bestätigen")
-                        Image(systemName: "hand.thumbsup")
+            ToolbarItem {
+                switch isBorrowed() {
+                    case true:
+                    Button {
+                        item.debtor = nil
+                    } label: {
+                        HStack(spacing: 4) {
+                            Text("Erhalt bestätigen")
+                            Image(systemName: "hand.thumbsup")
+                        }
+                        .accessibilityLabel("Rückgabe")
+                        .accessibilityHint("Tippe hier, wenn der Gegenstand zurückgegeben wurde.")
                     }
-                    .accessibilityLabel("Rückgabe")
-                    .accessibilityHint("Tippe hier, wenn der Gegenstand zurückgegeben wurde.")
-                }
-            case false:
-                Button {
-                    burrowSheetIsPresented.toggle()
-                } label: {
-                    HStack(spacing: 4) {
-                        Text("Verleihen")
-                        Image(systemName: "hand.palm.facing")
+                case false:
+                    Button {
+                        burrowSheetIsPresented.toggle()
+                    } label: {
+                        HStack(spacing: 4) {
+                            Text("Verleihen")
+                            Image(systemName: "hand.palm.facing")
+                        }
+                        .accessibilityLabel("Verleihen")
+                        .accessibilityHint("Tippe hier, um einen Entleiher festzulegen.")
                     }
-                    .accessibilityLabel("Verleihen")
-                    .accessibilityHint("Tippe hier, um einen Entleiher festzulegen.")
                 }
             }
         }
