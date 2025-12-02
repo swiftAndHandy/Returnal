@@ -11,9 +11,10 @@ import SwiftUI
 
 struct ItemDetailsView: View {
     @State var item: Item
-    @State var editItemIsPresented: Bool = false
     @State var burrowSheetIsPresented: Bool = false
     @State var editModeisActice: Bool = false
+    
+    @State var newDescription: String = ""
     
     var body: some View {
         ScrollView {
@@ -23,17 +24,40 @@ struct ItemDetailsView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
                 if editModeisActice {
-                    
+                    HStack {
+                        TextEditor(text: $newDescription)
+                            .font(.caption)
+                        HStack {
+                            Button {
+                                newDescription = item.details ?? ""
+                                editModeisActice = false
+                            } label: {
+                                Label("Verwerfen", systemImage: "multiply")
+                                    .labelStyle(.iconOnly)
+                            }
+                            
+                            Button {
+                                item.details = newDescription
+                                editModeisActice = false
+                            } label: {
+                                Label("Speichern", systemImage: "checkmark")
+                                    .labelStyle(.iconOnly)
+                            }
+                            
+                        }
+                    }
                 } else {
                     HStack {
                         Text(item.details ?? "Keine Beschreibung verfügbar.")
                             .font(.caption)
-                        Button { } label: {
-                            Label("", systemImage: "pencil.circle")
-                                .foregroundStyle(.primary)
-                                .font(.headline)
+                        if item.debtor == nil {
+                            Button { editModeisActice = true } label: {
+                                Label("", systemImage: "pencil.circle")
+                                    .foregroundStyle(.primary)
+                                    .font(.headline)
+                            }
+                            .buttonStyle(.plain)
                         }
-                        .buttonStyle(.plain)
                     }
                 }
                 
@@ -41,24 +65,49 @@ struct ItemDetailsView: View {
                 Divider()
                 
                 if let debtor = item.debtor {
-                    HStack(alignment: .top , spacing: 16) {
-                        VStack(alignment: .leading) {
-                            Text("Verliehen an:")
-                                .font(.caption)
-                            Text("\(debtor.firstName) \(debtor.lastName)")
-                            if let address = debtor.address {
-                                Divider()
-                                HStack {
-                                    Text("\(address.zipCode ?? "")")
-                                    Text("\(address.city ?? "")")
+                    VStack(alignment: .leading) {
+                        HStack(alignment: .top , spacing: 16) {
+                            VStack(alignment: .leading) {
+                                Text("Verliehen an:")
+                                    .font(.caption)
+                                Text("\(debtor.firstName) \(debtor.lastName)")
+                                    .font(.default.bold())
+                                if let address = debtor.address {
+                                    Text("\(address.street ?? "")")
+                                        .font(.subheadline)
+                                    HStack {
+                                        Text("\(address.zipCode ?? "")")
+                                            .font(.subheadline)
+                                        Text("\(address.city ?? "")")
+                                            .font(.subheadline)
+                                    }
+                                    Text("\(address.country ?? "")")
+                                        .font(.subheadline)
                                 }
                             }
+                            Spacer()
+                            VStack(alignment: .leading) {
+                                Text("Verliehen am:")
+                                    .font(.caption)
+                                Text("\(debtor.dateOfBorrowing.formatted(date: .long, time: .omitted))")
+                            }
                         }
-                        Spacer()
-                        VStack(alignment: .leading) {
-                            Text("Verliehen am:")
-                                .font(.caption)
-                            Text("\(debtor.dateOfBorrowing.formatted(date: .long, time: .omitted))")
+                        if debtor.email != nil || debtor.phoneNumber != nil {
+                            Divider()
+                            if let email = debtor.email {
+                                HStack {
+                                    Text("E-Mail:")
+                                    Text("\(email)")
+                                }
+                                .font(.subheadline)
+                            }
+                            if let phoneNumber = debtor.phoneNumber {
+                                HStack {
+                                    Text("Telefon:")
+                                    Text("\(phoneNumber)")
+                                }
+                                .font(.subheadline)
+                            }
                         }
                     }
                     Divider()
