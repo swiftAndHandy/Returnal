@@ -20,17 +20,45 @@ struct ContentView: View {
         SortDescriptor(\Item.name)
     ]) var items: [Item]
     
+    var filteredItems: [Item] {
+        items
+    }
+    
     var body: some View {
      
         NavigationStack(path: $qrCodePath) {
             VStack {
-                List {
-                    ForEach(items) { item in
-                        NavigationLink(value: item) {
-                            Text("\(item.name)")
-                            if let _ = item.debtor {
-                                Text("(verliehen)")
-                                    .foregroundStyle(.red)
+                if items.isEmpty {
+                    ContentUnavailableView(
+                        label: {
+                            Label("Keine Einträge vorhanden", systemImage: "shippingBox")
+                        },
+                        description: {
+                            Button {
+                                addItemIsPresented = true
+                            } label: {
+                                Text("Füge deinen ersten Gegenstand hinzu.")
+                            }
+                        }
+                    )
+                } else if filteredItems.isEmpty {
+                    ContentUnavailableView(
+                        label: {
+                            Label("Keine Suchergebnisse", systemImage: "magnifyingglass")
+                        },
+                        description: {
+                            Text("Der aktuelle Filter liefert keine Ergebnisse.")
+                        }
+                    )
+                } else {
+                    List {
+                        ForEach(filteredItems) { item in
+                            NavigationLink(value: item) {
+                                Text("\(item.name)")
+                                if let _ = item.debtor {
+                                    Text("(verliehen)")
+                                        .foregroundStyle(.red)
+                                }
                             }
                         }
                     }
