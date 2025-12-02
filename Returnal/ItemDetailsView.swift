@@ -10,15 +10,17 @@ import SwiftUI
 
 
 struct ItemDetailsView: View {
-    @State var item: Item
+    @Bindable var item: Item
     @State var burrowSheetIsPresented: Bool = false
     @State var editModeisActice: Bool = false
     
-    @State var newDescription: String = ""
+    @State var newDescription: String
+    
+    @Environment(\.modelContext) var modelContext
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 12) {
+            VStack(alignment: .leading, spacing: 16) {
                 Text(item.name)
                     .font(.largeTitle.bold())
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -27,6 +29,8 @@ struct ItemDetailsView: View {
                     HStack {
                         TextEditor(text: $newDescription)
                             .font(.caption)
+                            .frame(minHeight: 40)
+                            .scrollBounceBehavior(.basedOnSize)
                         HStack {
                             Button {
                                 newDescription = item.details ?? ""
@@ -38,6 +42,7 @@ struct ItemDetailsView: View {
                             
                             Button {
                                 item.details = newDescription
+                                try? modelContext.save()
                                 editModeisActice = false
                             } label: {
                                 Label("Speichern", systemImage: "checkmark")
@@ -46,6 +51,8 @@ struct ItemDetailsView: View {
                             
                         }
                     }
+                    .padding(.vertical, 2)
+                    .background(.red)
                 } else {
                     HStack {
                         Text(item.details ?? "Keine Beschreibung verfügbar.")
@@ -141,6 +148,7 @@ struct ItemDetailsView: View {
                     case true:
                     Button {
                         item.debtor = nil
+                        try? modelContext.save()
                     } label: {
                         HStack(spacing: 4) {
                             Text("Erhalt bestätigen")
@@ -170,6 +178,7 @@ struct ItemDetailsView: View {
     
     init(for item: Item) {
         self.item = item
+        self.newDescription = item.details ?? ""
     }
     
     func isBorrowed() -> Bool {

@@ -12,7 +12,7 @@ struct AssignBorrowerView: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
     
-    var item: Item
+    @Bindable var item: Item
     
     @State private var borrower: Borrower = Borrower(firstName: "", lastName: "", address: Address())
     
@@ -106,6 +106,8 @@ struct AssignBorrowerView: View {
         }
           
         item.debtor = Borrower(firstName: trimmedFirstName, lastName: trimmedLastName, phoneNumber: trimmedPhoneNumber, email: trimmedEMail, address: address)
+        
+        try? modelContext.save()
         
         dismiss()
     }
