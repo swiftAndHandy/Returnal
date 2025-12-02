@@ -32,25 +32,31 @@ struct ItemDetailsView: View {
                             .focused($descriptionIsFocused)
                             .frame(minHeight: 30)
                             .scrollBounceBehavior(.basedOnSize)
-                        HStack {
-                            Button {
+                        HStack(spacing: 20) {
+                            Button(role: .cancel) {
                                 newDescription = item.details ?? ""
                                 editModeisActice = false
                                 descriptionIsFocused = false
                             } label: {
-                                Label("Verwerfen", systemImage: "multiply")
+                                Label("Verwerfen", systemImage: "multiply.circle")
                                     .labelStyle(.iconOnly)
+                                    .font(.system(size: 20))
+                                    .foregroundStyle(.red)
                             }
+                            .buttonStyle(.plain)
                             
-                            Button {
+                            Button(role: .confirm) {
                                 item.details = newDescription
                                 try? modelContext.save()
                                 editModeisActice = false
                                 descriptionIsFocused = false
                             } label: {
-                                Label("Speichern", systemImage: "checkmark")
+                                Label("Speichern", systemImage: "checkmark.circle")
                                     .labelStyle(.iconOnly)
+                                    .font(.system(size: 20))
+                                    .foregroundStyle(.green)
                             }
+                            .buttonStyle(.plain)
                             
                         }
                     }
@@ -63,9 +69,11 @@ struct ItemDetailsView: View {
                                 editModeisActice = true
                                 descriptionIsFocused = true
                             } label: {
-                                Label("", systemImage: "pencil.circle")
+                                Label("Bearbeiten", systemImage: "pencil.line")
+                                    .font(.system(size: 20, weight: .bold))
                                     .foregroundStyle(.primary)
                                     .font(.headline)
+                                    .labelStyle(.iconOnly)
                             }
                             .buttonStyle(.plain)
                         }
@@ -76,7 +84,7 @@ struct ItemDetailsView: View {
                 Divider()
                 
                 if let debtor = item.debtor {
-                    DebtorView(debtor: debtor)
+                    DebtorView(debtor: debtor, itemName: item.name)
                 }
             
                 

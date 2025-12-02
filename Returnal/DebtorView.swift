@@ -10,6 +10,7 @@ import SwiftUI
 struct DebtorView: View {
     
     private var debtor: Borrower
+    private var itemName: String
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -43,16 +44,20 @@ struct DebtorView: View {
                 Divider()
                     .padding(.bottom)
                 if let email = debtor.email {
+                    let subject = "Rückgabe von \(itemName)"
+                    let encoded = subject.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? subject
+                    
                     HStack {
                         Text("E-Mail:")
-                        Text("\(email)")
+                        Link(email, destination: URL(string: "mailto:\(email)?subject=\(encoded)")!)
                     }
                     .font(.subheadline)
                 }
                 if let phoneNumber = debtor.phoneNumber {
+                    let cleanedPhoneNumber = phoneNumber.filter("0123456789+".contains)
                     HStack {
                         Text("Telefon:")
-                        Text("\(phoneNumber)")
+                        Link(phoneNumber, destination: URL(string: "tel:\(cleanedPhoneNumber)")!)
                     }
                     .font(.subheadline)
                 }
@@ -61,14 +66,16 @@ struct DebtorView: View {
         Divider()
     }
     
-    init(debtor: Borrower) {
+    init(debtor: Borrower, itemName: String) {
         self.debtor = debtor
+        self.itemName = itemName
     }
     
 }
 
 #Preview {
     DebtorView(
-        debtor: Borrower(firstName: "Klaus", lastName: "Kleber")
+        debtor: Borrower(firstName: "Klaus", lastName: "Kleber"),
+        itemName: "Rohrzange"
     )
 }
