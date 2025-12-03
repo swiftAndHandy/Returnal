@@ -108,11 +108,11 @@
 				};
 			};
 			buildConfigurationList = EED126792EDD8A060095DC42 /* Build configuration list for PBXProject "Returnal" */;
-			developmentRegion = en;
+			developmentRegion = de;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
+				de,
 			);
 			mainGroup = EED126752EDD8A060095DC42;
 			minimizedProjectReferenceProxies = 1;
