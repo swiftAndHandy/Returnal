@@ -46,29 +46,7 @@ struct ContentView: View {
                 } else if filteredItems.isEmpty {
                     NoFilteredItemsView()
                 } else {
-                    List {
-                        ForEach(filteredItems) { item in
-                            NavigationLink(value: item) {
-                                HStack {
-                                    Text("\(item.name)")
-                                    Spacer()
-                                    VStack(alignment: .leading) {
-                                        if let _ = item.debtor {
-                                            Text("verliehen")
-                                                .foregroundStyle(.red)
-                                        }
-                                        if item.qrCodeNeverScanned {
-                                            Text("ungescannt")
-                                                .foregroundStyle(
-                                                    colorScheme == .light ? .purple : .cyan
-                                                )
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    Text(itemType.rawValue)
+                    FilteredItemsView(items: filteredItems)
                 }
             }
             .navigationTitle("Übersicht")
@@ -91,7 +69,7 @@ struct ContentView: View {
             }
             .toolbar {
                 ToolbarItem {
-                    Menu("Filter", systemImage: "line.3.horizontal.decrease") {
+                    Menu("Filter", systemImage: itemType == .all ? "line.3.horizontal.decrease" : "line.3.horizontal.decrease") {
                         Picker("Filter", selection: $itemType) {
                             ForEach(Filter.types.allCases, id: \.self) { type in
                                 Text(type.rawValue)
