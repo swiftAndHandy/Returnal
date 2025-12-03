@@ -15,6 +15,8 @@ struct AddItemView: View {
     @State private var itemName: String = ""
     @State private var itemDescription: String = ""
     
+    var onCreated: (Item) -> Void
+    
     
     var body: some View {
         NavigationStack {
@@ -65,10 +67,14 @@ struct AddItemView: View {
         }
     
         modelContext.insert(newItem)
+        try? modelContext.save()
+        
+        onCreated(newItem)
+        
         dismiss()
     }
 }
 
 #Preview {
-    AddItemView()
+    AddItemView { _ in }
 }

@@ -9,6 +9,7 @@ import SwiftData
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(\.modelContext) var modelContext
     @EnvironmentObject private var router: DeepLinkRouter
     
     @State private var qrCodePath: [Item] = []
@@ -38,10 +39,19 @@ struct ContentView: View {
                     List {
                         ForEach(filteredItems) { item in
                             NavigationLink(value: item) {
-                                Text("\(item.name)")
-                                if let _ = item.debtor {
-                                    Text("(verliehen)")
-                                        .foregroundStyle(.red)
+                                HStack {
+                                    Text("\(item.name)")
+                                    Spacer()
+                                    VStack(alignment: .leading) {
+                                        if let _ = item.debtor {
+                                            Text("(verliehen)")
+                                                .foregroundStyle(.red)
+                                        }
+                                        if item.qrCodeNeverScanned {
+                                            Text("(ungescannt)")
+                                                .foregroundStyle(.yellow)
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -58,7 +68,10 @@ struct ContentView: View {
                 qrCodePath = []
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
                     if let match = items.first(where: { $0.id == uuid}) {
-                        
+                        if match.qrCodeNeverScanned {
+                            match.qrCodeNeverScanned = false
+                            try? modelContext.save()
+                        }
                         qrCodePath.append(match)
                         router.targetUUID = nil
                     }
@@ -86,7 +99,10 @@ struct ContentView: View {
                 }
             }
             .sheet(isPresented: $addItemIsPresented) {
-                AddItemView()
+                AddItemView { newItem in
+                    qrCodePath = []
+                    qrCodePath.append(newItem)
+                }
             }
         }
         

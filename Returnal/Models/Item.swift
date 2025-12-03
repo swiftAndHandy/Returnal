@@ -15,6 +15,8 @@ class Item: Identifiable {
     var details: String?
     var debtor: Borrower?
     
+    var qrCodeNeverScanned: Bool = true
+    
     init(name: String, details: String? = nil, debtor: Borrower? = nil) {
         self.id = UUID()
         self.name = name
