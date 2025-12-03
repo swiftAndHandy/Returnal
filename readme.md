@@ -25,11 +25,13 @@ Selbstverständlich kannst du deine Gegenstände filtern. So siehst du auf einen
 ### Beschreibungen
 Du kannst jedem Gegenstand eine Beschreibung hinzufügen. Diese kann nur dann bearbeitet werden, wenn der Gegenstand gerade <strong>nicht</strong> verliehen wurde.
 
-## ToDos:
+## Ideen zur Erweiterung:
 <ul>
-    <li>Gegenstände namentlich filtern</li>
     <li>Entleiher-Protokoll - wer hatte das Objekt von wann bis wann entliehen?</li>
     <li>Beschreibungs-Protokoll - welche Änderungen an der Beschreibung wurden wann vorgenommen?</li>
+    <li>Entleiher aus den Apple Contacts übertragen</li>
+    <li>Fotos von Gegenständen hinzufügen</li>
+    <li>ISBN-Code-Scanner um Medientitel beim Anlegen neuer Items zu übertragen</li>
 </ul>         
 
 ## Wieso heißt Returnal eigentlich Returnal?
