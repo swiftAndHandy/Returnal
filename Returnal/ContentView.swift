@@ -56,6 +56,7 @@ struct ContentView: View {
                     FilteredItemsView(items: finalItemList)
                 }
             }
+            .searchable(text: $searchQuery)
             .navigationTitle("Übersicht")
             .navigationDestination(for: Item.self) { item in
                 ItemDetailsView(for: item)
@@ -103,23 +104,6 @@ struct ContentView: View {
                 }
             }
         }
-        
-        HStack {
-            Image(systemName: "magnifyingglass")
-                .padding(.leading, 20)
-            TextField("Suche", text: $searchQuery)
-                .foregroundStyle(.primary)
-                .autocapitalization(.none)
-                .autocorrectionDisabled()
-                .padding(.vertical)
-                
-        }
-        .background(
-            RoundedRectangle(cornerRadius: 100)
-                .fill(.primary.opacity(0.04))
-        )
-        .padding()
-        
     }
 }
 
