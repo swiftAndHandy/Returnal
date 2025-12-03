@@ -23,6 +23,7 @@ struct AddItemView: View {
             Form {
                 Section("Pflichtangaben") {
                     TextField("Name des Gegenstands", text: $itemName)
+                        .autocorrectionDisabled()
                 }
                 Section("Ergänzende Angaben") {
                     TextEditor(text: $itemDescription)
