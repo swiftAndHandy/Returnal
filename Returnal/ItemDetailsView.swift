@@ -13,11 +13,13 @@ struct ItemDetailsView: View {
     @Bindable private var item: Item
     @State private var burrowSheetIsPresented: Bool = false
     @State private var editModeisActice: Bool = false
+    @State private var showDeleteConfirmation: Bool = false
     @FocusState private var descriptionIsFocused: Bool
     
     @State var newDescription: String
     
     @Environment(\.modelContext) var modelContext
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
         ScrollView {
@@ -102,6 +104,24 @@ struct ItemDetailsView: View {
                         } else {
                             
                         }
+                    }
+                    
+                    Button(role: .destructive) {
+                        showDeleteConfirmation = true
+                    } label: {
+                        Label("Gegenstand löschen", systemImage: "trash")
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(item.debtor != nil)
+                    .alert("Gegenstand wirklich löschen?", isPresented: $showDeleteConfirmation) {
+                        Button("Abbrechen", role: .cancel) { }
+                        Button("Ja, löschen", role: .destructive) {
+                            modelContext.delete(item)
+                            try? modelContext.save()
+                            dismiss()
+                        }
+                    } message: {
+                        Text("Dieser Vorgang kann nicht rückgängig gemacht werden.")
                     }
                 }
                 

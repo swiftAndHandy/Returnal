@@ -13,7 +13,7 @@ class Item: Identifiable {
     var id: UUID
     var name: String
     var details: String?
-    var debtor: Borrower?
+    @Relationship(deleteRule: .cascade) var debtor: Borrower?
     
     var qrCodeNeverScanned: Bool = true
     
