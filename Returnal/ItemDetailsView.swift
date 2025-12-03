@@ -101,7 +101,10 @@ struct ItemDetailsView: View {
                             VStack {
                                 Text("ID: \n\(item.id)")
                                 Button("Drucken") {
-                                    QRCode.printCode(item: item, size: 20)
+                                    QRCode.printCode(item: item, size: 50)
+                                }
+                                Button("Multi-Druck") {
+                                    QRCode.printCodes(items: [item, item, item, item, item, item, item, item, item, item, item, item, item], size: 50)
                                 }
                             }
                         } else {

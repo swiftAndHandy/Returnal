@@ -2,6 +2,123 @@ import CoreImage.CIFilterBuiltins
 import SwiftUI
 
 struct QRCode {
+    private struct RenderedEntry {
+        let qr: UIImage
+        let text: String
+        let textHeight: CGFloat
+        let fontSize: CGFloat
+    }
+
+    private static func prepareEntry(for item: Item, size: CGFloat) -> RenderedEntry? {
+        guard let qr = drawCode(uuid: item.id) else { return nil }
+
+        let qrPrintSize: CGFloat = size
+        let maxTextHeight = qrPrintSize * 0.25
+        var fontSize = max(qrPrintSize * 0.15, 5)
+
+        let style = NSMutableParagraphStyle()
+        style.alignment = .center
+        style.lineBreakMode = .byWordWrapping
+
+        var attributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.systemFont(ofSize: fontSize),
+            .foregroundColor: UIColor.black,
+            .paragraphStyle: style
+        ]
+
+        var bounding: CGRect = .zero
+        repeat {
+            attributes[.font] = UIFont.systemFont(ofSize: fontSize)
+            bounding = (item.name as NSString).boundingRect(
+                with: CGSize(width: qrPrintSize, height: .greatestFiniteMagnitude),
+                options: [.usesLineFragmentOrigin, .usesFontLeading],
+                attributes: attributes,
+                context: nil
+            )
+            // if bounding still too high, reduce font and try again
+            if bounding.height > maxTextHeight {
+                fontSize -= 0.5
+            } else {
+                // found a font that fits
+                break
+            }
+        } while fontSize > 5
+
+        // Ensure final fontSize is not below minimum
+        if fontSize < 5 { fontSize = 5 }
+
+        // Recompute bounding with the final font size
+        attributes[.font] = UIFont.systemFont(ofSize: fontSize)
+        bounding = (item.name as NSString).boundingRect(
+            with: CGSize(width: qrPrintSize, height: .greatestFiniteMagnitude),
+            options: [.usesLineFragmentOrigin, .usesFontLeading],
+            attributes: attributes,
+            context: nil
+        )
+
+        let finalHeight = ceil(bounding.height)
+
+        return RenderedEntry(qr: qr, text: item.name, textHeight: finalHeight, fontSize: fontSize)
+    }
+
+    private static func renderPDF(entries: [RenderedEntry], columns: Int, size: CGFloat, spacing: CGFloat, addBorder: Bool) -> (data: Data, pageWidth: CGFloat, pageHeight: CGFloat) {
+
+        let cellWidth = size + 20
+        let cellHeight = size + 40
+        let pageWidth = CGFloat(columns) * (cellWidth + spacing)
+        let pageHeight: CGFloat = 800
+
+        let renderer = UIGraphicsPDFRenderer(bounds: CGRect(x: 0, y: 0, width: pageWidth, height: pageHeight))
+
+        let data = renderer.pdfData { ctx in
+            var index = 0
+            while index < entries.count {
+                ctx.beginPage()
+
+                for row in 0..<200 {
+                    let y = CGFloat(row) * (cellHeight + spacing)
+                    if y + cellHeight > pageHeight { break }
+
+                    for col in 0..<columns {
+                        guard index < entries.count else { break }
+
+                        let entry = entries[index]
+                        let x = CGFloat(col) * (cellWidth + spacing)
+
+                        if addBorder {
+                            let borderRect = CGRect(x: x, y: y, width: cellWidth, height: cellHeight)
+                            UIColor.black.setStroke()
+                            UIBezierPath(rect: borderRect).stroke()
+                        }
+
+                        entry.qr.draw(in: CGRect(x: x + 10, y: y + 10, width: size, height: size))
+
+                        let style = NSMutableParagraphStyle()
+                        style.alignment = .center
+
+                        let attributes: [NSAttributedString.Key: Any] = [
+                            .font: UIFont.systemFont(ofSize: entry.fontSize),
+                            .foregroundColor: UIColor.black,
+                            .paragraphStyle: style
+                        ]
+
+                        let textRect = CGRect(
+                            x: x + 10,
+                            y: y + size + 12,
+                            width: size,
+                            height: entry.textHeight
+                        )
+                        (entry.text as NSString).draw(in: textRect, withAttributes: attributes)
+
+                        index += 1
+                    }
+                }
+            }
+        }
+
+        return (data, pageWidth, pageHeight)
+    }
+
     static func drawCode(uuid: UUID) -> UIImage? {
         let combined = "returnal://open?uuid=\(uuid)"
         let data = Data(combined.utf8)
@@ -23,55 +140,10 @@ struct QRCode {
     }
     
     static func printCode(item: Item, size: CGFloat = 200) {
-        guard let qrImage = drawCode(uuid: item.id) else { return }
+        guard let entry = prepareEntry(for: item, size: size) else { return }
 
-        // Desired QR code print size in points (can be scaled to mm/inches)
-        let qrPrintSize: CGFloat = size
+        let rendered = renderPDF(entries: [entry], columns: 1, size: size, spacing: 20, addBorder: true)
 
-        // Paragraph style
-        let style = NSMutableParagraphStyle()
-        style.alignment = .center
-        style.lineBreakMode = .byWordWrapping
-
-        // Dynamic font size proportional to QR code
-        let maxTextHeight = qrPrintSize * 0.25
-        var fontSize = max(qrPrintSize * 0.15, 5)
-        var attributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.systemFont(ofSize: fontSize),
-            .foregroundColor: UIColor.black,
-            .paragraphStyle: style
-        ]
-
-        var bounding: CGRect = .zero
-        repeat {
-            attributes[.font] = UIFont.systemFont(ofSize: fontSize)
-            bounding = (item.name as NSString).boundingRect(
-                with: CGSize(width: qrPrintSize, height: CGFloat.greatestFiniteMagnitude),
-                options: [.usesLineFragmentOrigin, .usesFontLeading],
-                attributes: attributes,
-                context: nil
-            )
-            fontSize -= 0.5
-        } while bounding.height > maxTextHeight && fontSize > 5
-
-        let textHeight = ceil(bounding.height)
-        let totalWidth = qrPrintSize
-        let totalHeight = qrPrintSize + textHeight + 8 // small padding
-
-        // Create a PDF of exactly the QR+Text size
-        let renderer = UIGraphicsPDFRenderer(bounds: CGRect(x: 0, y: 0, width: totalWidth, height: totalHeight))
-        let data = renderer.pdfData { ctx in
-            ctx.beginPage()
-            qrImage.draw(in: CGRect(x: 0, y: 0, width: qrPrintSize, height: qrPrintSize))
-            let textRect = CGRect(x: 0, y: qrPrintSize + 4, width: qrPrintSize, height: textHeight)
-            (item.name as NSString).draw(in: textRect, withAttributes: attributes)
-        }
-
-        // Save temp PDF
-        let url = FileManager.default.temporaryDirectory.appendingPathComponent("\(item.name)_\(item.id).pdf")
-        try? data.write(to: url)
-
-        // Print with custom PageRenderer to avoid auto-scaling
         let printInfo = UIPrintInfo(dictionary: nil)
         printInfo.outputType = .general
         printInfo.jobName = "Returnal QR-Code"
@@ -79,86 +151,18 @@ struct QRCode {
         let printController = UIPrintInteractionController.shared
         printController.printInfo = printInfo
 
-        printController.printPageRenderer = QRCodePrintRenderer(pdfData: data, paperRect: CGRect(x: 0, y: 0, width: totalWidth, height: totalHeight))
+        printController.printPageRenderer = QRCodePrintRenderer(
+            pdfData: rendered.data,
+            paperRect: CGRect(x: 0, y: 0, width: rendered.pageWidth, height: rendered.pageHeight)
+        )
         printController.present(animated: true)
     }
     
     static func printCodes(items: [Item], size: CGFloat = 200, spacing: CGFloat = 20) {
-        guard !items.isEmpty else { return }
+        let entries = items.compactMap { prepareEntry(for: $0, size: size) }
+        guard !entries.isEmpty else { return }
 
-        // Prepare all QR images + text sizes
-        var entries: [(qr: UIImage, text: String, textHeight: CGFloat)] = []
-
-        for item in items {
-            guard let qr = drawCode(uuid: item.id) else { continue }
-
-            // Paragraph style
-            let style = NSMutableParagraphStyle()
-            style.alignment = .center
-            style.lineBreakMode = .byWordWrapping
-
-            let qrPrintSize: CGFloat = size
-            let maxTextHeight = qrPrintSize * 0.25
-            var fontSize = max(qrPrintSize * 0.15, 5)
-            var attributes: [NSAttributedString.Key: Any] = [
-                .font: UIFont.systemFont(ofSize: fontSize),
-                .foregroundColor: UIColor.black,
-                .paragraphStyle: style
-            ]
-
-            var bounding: CGRect = .zero
-            repeat {
-                attributes[.font] = UIFont.systemFont(ofSize: fontSize)
-                bounding = (item.name as NSString).boundingRect(
-                    with: CGSize(width: qrPrintSize, height: .greatestFiniteMagnitude),
-                    options: [.usesLineFragmentOrigin, .usesFontLeading],
-                    attributes: attributes,
-                    context: nil
-                )
-                fontSize -= 0.5
-            } while bounding.height > maxTextHeight && fontSize > 5
-
-            let finalHeight = ceil(bounding.height)
-            entries.append((qr, item.name, finalHeight))
-        }
-
-        if entries.isEmpty { return }
-
-        // Width is always the QR size
-        let width = size
-
-        // Total height = sum of entries (qr + text + padding) + spacing between blocks
-        let totalHeight: CGFloat = entries.reduce(0) { acc, entry in
-            acc + size + entry.textHeight + 8 + spacing
-        }
-
-        let renderer = UIGraphicsPDFRenderer(bounds: CGRect(x: 0, y: 0, width: width, height: totalHeight))
-        let data = renderer.pdfData { ctx in
-            ctx.beginPage()
-
-            var offsetY: CGFloat = 0
-
-            for entry in entries {
-                // Draw QR
-                entry.qr.draw(in: CGRect(x: 0, y: offsetY, width: size, height: size))
-
-                // Draw Text
-                let style = NSMutableParagraphStyle()
-                style.alignment = .center
-
-                let attributes: [NSAttributedString.Key: Any] = [
-                    .font: UIFont.systemFont(ofSize: max(size * 0.15, 5)),
-                    .foregroundColor: UIColor.black,
-                    .paragraphStyle: style
-                ]
-
-                let textRect = CGRect(x: 0, y: offsetY + size + 4, width: size, height: entry.textHeight)
-                (entry.text as NSString).draw(in: textRect, withAttributes: attributes)
-
-                // Move down
-                offsetY += size + entry.textHeight + 8 + spacing
-            }
-        }
+        let rendered = renderPDF(entries: entries, columns: 3, size: size, spacing: spacing, addBorder: true)
 
         let printInfo = UIPrintInfo(dictionary: nil)
         printInfo.outputType = .general
@@ -168,8 +172,8 @@ struct QRCode {
         printController.printInfo = printInfo
 
         printController.printPageRenderer = QRCodePrintRenderer(
-            pdfData: data,
-            paperRect: CGRect(x: 0, y: 0, width: width, height: totalHeight)
+            pdfData: rendered.data,
+            paperRect: CGRect(x: 0, y: 0, width: rendered.pageWidth, height: rendered.pageHeight)
         )
         printController.present(animated: true)
     }
