@@ -22,7 +22,16 @@ struct ContentView: View {
     ]) var items: [Item]
     
     var filteredItems: [Item] {
-        items
+        switch itemType {
+        case .all:
+            return items
+        case .borrowed:
+            return items.filter { $0.debtor != nil}
+        case .available:
+            return items.filter { $0.debtor == nil}
+        case .unscanned:
+            return items.filter { $0.qrCodeNeverScanned }
+        }
     }
     
     @State private var itemType: Filter.types = Filter.types.all
