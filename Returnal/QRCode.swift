@@ -61,12 +61,18 @@ struct QRCode {
         return RenderedEntry(qr: qr, text: item.name, textHeight: finalHeight, fontSize: fontSize)
     }
 
-    private static func renderPDF(entries: [RenderedEntry], columns: Int, size: CGFloat, spacing: CGFloat, addBorder: Bool) -> (data: Data, pageWidth: CGFloat, pageHeight: CGFloat) {
+    private static func renderPDF(entries: [RenderedEntry], size: CGFloat, spacing: CGFloat, addBorder: Bool) -> (data: Data, pageWidth: CGFloat, pageHeight: CGFloat) {
 
+        // Standard A4 page size in points (portrait)
+        let pageWidth: CGFloat = 595
+        let pageHeight: CGFloat = 842
+
+        // Calculate cell size including padding
         let cellWidth = size + 20
         let cellHeight = size + 40
-        let pageWidth = CGFloat(columns) * (cellWidth + spacing)
-        let pageHeight: CGFloat = 800
+
+        // Dynamically calculate number of columns that fit
+        let columns = max(Int(floor(pageWidth / (cellWidth + spacing))), 1)
 
         let renderer = UIGraphicsPDFRenderer(bounds: CGRect(x: 0, y: 0, width: pageWidth, height: pageHeight))
 
@@ -75,7 +81,8 @@ struct QRCode {
             while index < entries.count {
                 ctx.beginPage()
 
-                for row in 0..<200 {
+                var row = 0
+                while true {
                     let y = CGFloat(row) * (cellHeight + spacing)
                     if y + cellHeight > pageHeight { break }
 
@@ -112,6 +119,9 @@ struct QRCode {
 
                         index += 1
                     }
+
+                    row += 1
+                    if index >= entries.count { break }
                 }
             }
         }
@@ -142,7 +152,7 @@ struct QRCode {
     static func printCode(item: Item, size: CGFloat = 200) {
         guard let entry = prepareEntry(for: item, size: size) else { return }
 
-        let rendered = renderPDF(entries: [entry], columns: 1, size: size, spacing: 20, addBorder: true)
+        let rendered = renderPDF(entries: [entry], size: size, spacing: 20, addBorder: true)
 
         let printInfo = UIPrintInfo(dictionary: nil)
         printInfo.outputType = .general
@@ -162,7 +172,7 @@ struct QRCode {
         let entries = items.compactMap { prepareEntry(for: $0, size: size) }
         guard !entries.isEmpty else { return }
 
-        let rendered = renderPDF(entries: entries, columns: 3, size: size, spacing: spacing, addBorder: true)
+        let rendered = renderPDF(entries: entries, size: size, spacing: spacing, addBorder: true)
 
         let printInfo = UIPrintInfo(dictionary: nil)
         printInfo.outputType = .general
@@ -230,6 +240,9 @@ class QRCodePrintRenderer: UIPrintPageRenderer {
     }
 
     override var numberOfPages: Int {
+        if let pdf = CGPDFDocument(CGDataProvider(data: pdfData as CFData)!) {
+            return pdf.numberOfPages
+        }
         return 1
     }
 }
