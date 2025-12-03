@@ -24,7 +24,7 @@ struct ContentView: View {
         items
     }
     
-    @State private var itemType: Filter.types.RawValue = Filter.types.all.rawValue
+    @State private var itemType: Filter.types = Filter.types.all
     
     var body: some View {
      
@@ -46,7 +46,7 @@ struct ContentView: View {
                             }
                         }
                     }
-                    Text(itemType)
+                    Text(itemType.rawValue)
                 }
             }
             .navigationTitle("Übersicht")
