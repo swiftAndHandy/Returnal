@@ -24,7 +24,8 @@ struct ContentView: View {
         items
     }
     
-    @State private var itemType = Item.types.first
+    @State private var itemType: Filter.types.RawValue = Filter.types.all.rawValue
+    
     var body: some View {
      
         NavigationStack(path: $qrCodePath) {
@@ -45,7 +46,7 @@ struct ContentView: View {
                             }
                         }
                     }
-                    Text(itemType ?? "nil")
+                    Text(itemType)
                 }
             }
             .navigationTitle("Übersicht")
@@ -67,8 +68,8 @@ struct ContentView: View {
                 ToolbarItem {
                     Menu("Filter", systemImage: "line.3.horizontal.decrease") {
                         Picker("Filter", selection: $itemType) {
-                            ForEach(Item.types, id: \.self) { type in
-                                Text(type)
+                            ForEach(Filter.types.allCases, id: \.self) { type in
+                                Text(type.rawValue)
                                     .tag(type)
                             }
                         }
