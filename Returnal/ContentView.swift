@@ -56,7 +56,7 @@ struct ContentView: View {
                     FilteredItemsView(items: finalItemList)
                 }
             }
-            .searchable(text: $searchQuery)
+            .searchable(text: $searchQuery, prompt: Text("Suche Gegenstand"))
             .navigationTitle("Übersicht")
             .navigationDestination(for: Item.self) { item in
                 ItemDetailsView(for: item)
