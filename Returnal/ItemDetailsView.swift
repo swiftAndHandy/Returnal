@@ -94,7 +94,7 @@ struct ItemDetailsView: View {
                     Text("Konfiguration:")
                         .font(.caption)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    HStack {
+                    HStack() {
                         let uiImage = QRCode.drawCode(uuid: item.id)
                         if let qrCode = uiImage {
                             QRCodeView(for: qrCode, size: 150)
@@ -105,28 +105,11 @@ struct ItemDetailsView: View {
                             
                         }
                     }
-                    
-                    Button(role: .destructive) {
-                        showDeleteConfirmation = true
-                    } label: {
-                        Label("Gegenstand löschen", systemImage: "trash")
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .disabled(item.debtor != nil)
-                    .alert("Gegenstand wirklich löschen?", isPresented: $showDeleteConfirmation) {
-                        Button("Abbrechen", role: .cancel) { }
-                        Button("Ja, löschen", role: .destructive) {
-                            modelContext.delete(item)
-                            try? modelContext.save()
-                            dismiss()
-                        }
-                    } message: {
-                        Text("Dieser Vorgang kann nicht rückgängig gemacht werden.")
-                    }
                 }
-                
             }
             .padding()
+            
+            
         }
         .scrollBounceBehavior(.basedOnSize)
         .toolbar {
@@ -161,6 +144,26 @@ struct ItemDetailsView: View {
         .sheet(isPresented: $burrowSheetIsPresented) {
             AssignBorrowerView(item: item)
         }
+        
+        Button(role: .destructive) {
+            showDeleteConfirmation = true
+        } label: {
+            Label("Gegenstand löschen", systemImage: "trash")
+                .padding(4)
+        }
+        .buttonStyle(.borderedProminent)
+        .disabled(item.debtor != nil)
+        .alert("Gegenstand wirklich löschen?", isPresented: $showDeleteConfirmation) {
+            Button("Abbrechen", role: .cancel) { }
+            Button("Ja, löschen", role: .destructive) {
+                modelContext.delete(item)
+                try? modelContext.save()
+                dismiss()
+            }
+        } message: {
+            Text("Dieser Vorgang kann nicht rückgängig gemacht werden.")
+        }
+        .padding()
     }
     
     init(for item: Item) {
