@@ -26,7 +26,7 @@ struct AddItemView: View {
                 }
                 Section("Ergänzende Angaben") {
                     TextEditor(text: $itemDescription)
-                        .padding(.vertical, 2)
+                        .frame(minHeight: 250)
                 }
             }
             .navigationTitle("Neuer Gegenstand")
