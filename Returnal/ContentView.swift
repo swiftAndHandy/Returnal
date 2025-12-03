@@ -13,8 +13,9 @@ struct ContentView: View {
     @EnvironmentObject private var router: DeepLinkRouter
     @Environment(\.colorScheme) private var colorScheme
     
-    @State private var qrCodePath: [Item] = []
+    @FocusState private var searchFieldIsFocused: Bool
     
+    @State private var qrCodePath: [Item] = []
     @State private var addItemIsPresented: Bool = false
     @State private var searchQuery: String = ""
     
@@ -74,13 +75,6 @@ struct ContentView: View {
                 }
             }
             .toolbar {
-                ToolbarItem(placement: .bottomBar) {
-                    TextField("Suche", text: $searchQuery)
-                        .autocapitalization(.none)
-                        .autocorrectionDisabled()
-                        .padding(.horizontal, 14)
-                }
-                
                 Group {
                     ToolbarItem {
                         Menu("Filter", systemImage: itemType == .all ? "line.3.horizontal.decrease" : "line.3.horizontal.decrease") {
@@ -109,6 +103,22 @@ struct ContentView: View {
                 }
             }
         }
+        
+        HStack {
+            Image(systemName: "magnifyingglass")
+                .padding(.leading, 20)
+            TextField("Suche", text: $searchQuery)
+                .foregroundStyle(.primary)
+                .autocapitalization(.none)
+                .autocorrectionDisabled()
+                .padding(.vertical)
+                
+        }
+        .background(
+            RoundedRectangle(cornerRadius: 100)
+                .fill(.primary.opacity(0.04))
+        )
+        .padding()
         
     }
 }
