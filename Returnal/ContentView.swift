@@ -9,8 +9,9 @@ import SwiftData
 import SwiftUI
 
 struct ContentView: View {
-    @Environment(\.modelContext) var modelContext
+    @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var router: DeepLinkRouter
+    @Environment(\.colorScheme) private var colorScheme
     
     @State private var qrCodePath: [Item] = []
     
@@ -53,12 +54,14 @@ struct ContentView: View {
                                     Spacer()
                                     VStack(alignment: .leading) {
                                         if let _ = item.debtor {
-                                            Text("(verliehen)")
+                                            Text("verliehen")
                                                 .foregroundStyle(.red)
                                         }
                                         if item.qrCodeNeverScanned {
-                                            Text("(ungescannt)")
-                                                .foregroundStyle(.yellow)
+                                            Text("ungescannt")
+                                                .foregroundStyle(
+                                                    colorScheme == .light ? .purple : .cyan
+                                                )
                                         }
                                     }
                                 }
