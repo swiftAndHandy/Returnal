@@ -16,7 +16,7 @@ struct ContentView: View {
     @State private var qrCodePath: [Item] = []
     
     @State private var addItemIsPresented: Bool = false
-    @State private var searchText: String = ""
+    @State private var searchQuery: String = ""
     
     @Query(sort: [
         SortDescriptor(\Item.name)
@@ -35,6 +35,12 @@ struct ContentView: View {
         }
     }
     
+    var finalItemList: [Item] {
+        let base = filteredItems
+        guard !searchQuery.isEmpty else { return base }
+        return base.filter { $0.name.localizedCaseInsensitiveContains(searchQuery.trimmingCharacters(in: .whitespaces)) }
+    }
+    
     @State private var itemType: Filter.types = Filter.types.all
     
     var body: some View {
@@ -43,10 +49,10 @@ struct ContentView: View {
             VStack {
                 if items.isEmpty {
                     NoItemsView(addItemIsPresented: $addItemIsPresented)
-                } else if filteredItems.isEmpty {
+                } else if finalItemList.isEmpty {
                     NoFilteredItemsView()
                 } else {
-                    FilteredItemsView(items: filteredItems)
+                    FilteredItemsView(items: finalItemList)
                 }
             }
             .navigationTitle("Übersicht")
@@ -68,23 +74,31 @@ struct ContentView: View {
                 }
             }
             .toolbar {
-                ToolbarItem {
-                    Menu("Filter", systemImage: itemType == .all ? "line.3.horizontal.decrease" : "line.3.horizontal.decrease") {
-                        Picker("Filter", selection: $itemType) {
-                            ForEach(Filter.types.allCases, id: \.self) { type in
-                                Text(type.rawValue)
-                                    .tag(type)
+                ToolbarItem(placement: .bottomBar) {
+                    TextField("Suche", text: $searchQuery)
+                        .autocapitalization(.none)
+                        .autocorrectionDisabled()
+                        .padding(.horizontal, 14)
+                }
+                
+                Group {
+                    ToolbarItem {
+                        Menu("Filter", systemImage: itemType == .all ? "line.3.horizontal.decrease" : "line.3.horizontal.decrease") {
+                            Picker("Filter", selection: $itemType) {
+                                ForEach(Filter.types.allCases, id: \.self) { type in
+                                    Text(type.rawValue)
+                                        .tag(type)
+                                }
                             }
                         }
                     }
-                }
-                
-                
-                ToolbarItem {
-                    Button {
-                        addItemIsPresented = true
-                    } label: {
-                        Label("Neuer Gegenstand", systemImage: "plus")
+                    
+                    ToolbarItem {
+                        Button {
+                            addItemIsPresented = true
+                        } label: {
+                            Label("Neuer Gegenstand", systemImage: "plus")
+                        }
                     }
                 }
             }
