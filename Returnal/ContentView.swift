@@ -19,9 +19,13 @@ struct ContentView: View {
     @State private var addItemIsPresented: Bool = false
     @State private var searchQuery: String = ""
     
+    @State private var showMultiPrintAlert: Bool = false
+    
     @Query(sort: [
         SortDescriptor(\Item.name)
     ]) var items: [Item]
+    
+    var unscannedItems: [Item] { items.filter { $0.qrCodeNeverScanned } }
     
     var filteredItems: [Item] {
         switch itemType {
@@ -32,7 +36,7 @@ struct ContentView: View {
         case .available:
             return items.filter { $0.debtor == nil}
         case .unscanned:
-            return items.filter { $0.qrCodeNeverScanned }
+            return unscannedItems
         }
     }
     
@@ -56,6 +60,15 @@ struct ContentView: View {
                     FilteredItemsView(items: finalItemList)
                 }
             }
+            .alert("Ungescannte QR-Codes drucken?", isPresented: $showMultiPrintAlert) {
+                Button("Abbrechen", role: .cancel) {}
+                Button("Ja, fortfahren.", role: .confirm) {
+                    printUnscannedCodes()
+                }
+                
+            } message: {
+                Text("Soll ein Dokument erstellt werden, dass alle ungescannten Barcodes enthält?")
+            }
             .searchable(text: $searchQuery, prompt: Text("Suche Gegenstand"))
             .navigationTitle("Übersicht")
             .navigationDestination(for: Item.self) { item in
@@ -76,9 +89,21 @@ struct ContentView: View {
                 }
             }
             .toolbar {
+                if !unscannedItems.isEmpty {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button {
+                            showMultiPrintAlert = true
+                        } label: {
+                            HStack {
+                                Label("QR-Code Druck", systemImage: "printer.fill")
+                            }
+                        }
+                    }
+                }
+                
                 Group {
                     ToolbarItem {
-                        Menu("Filter", systemImage: itemType == .all ? "line.3.horizontal.decrease" : "line.3.horizontal.decrease") {
+                        Menu("Filter", systemImage: itemType == .all ? "line.3.horizontal.decrease" : "line.3.horizontal.decrease.circle") {
                             Picker("Filter", selection: $itemType) {
                                 ForEach(Filter.types.allCases, id: \.self) { type in
                                     Text(type.rawValue)
@@ -104,6 +129,10 @@ struct ContentView: View {
                 }
             }
         }
+    }
+    
+    func printUnscannedCodes() {
+        QRCode.printCodes(items: unscannedItems, size: 50)
     }
 }
 
