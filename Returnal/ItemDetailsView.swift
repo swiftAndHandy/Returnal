@@ -98,12 +98,14 @@ struct ItemDetailsView: View {
                         let uiImage = QRCode.drawCode(uuid: item.id)
                         if let qrCode = uiImage {
                             QRCodeView(for: qrCode, size: 150)
+                            Spacer()
                             VStack {
-                                Text("ID: \n\(item.id)")
-                                Button("Drucken") {
+                                Button("QR-Code drucken") {
                                     QRCode.printCode(item: item, size: 50)
                                 }
+                                .buttonStyle(.borderedProminent)
                             }
+                            Spacer()
                         } else {
                             
                         }
