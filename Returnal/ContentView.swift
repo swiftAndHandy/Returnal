@@ -32,9 +32,9 @@ struct ContentView: View {
         case .all:
             return items
         case .borrowed:
-            return items.filter { $0.debtor != nil}
+            return items.filter { $0.isBorrowed }
         case .available:
-            return items.filter { $0.debtor == nil}
+            return items.filter { !$0.isBorrowed }
         case .unscanned:
             return unscannedItems
         }

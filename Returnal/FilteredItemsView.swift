@@ -20,7 +20,7 @@ struct FilteredItemsView: View {
                         Text("\(item.name)")
                         Spacer()
                         VStack(alignment: .leading) {
-                            if let _ = item.debtor {
+                            if item.isBorrowed {
                                 Text("verliehen")
                                     .foregroundStyle(.red)
                             }

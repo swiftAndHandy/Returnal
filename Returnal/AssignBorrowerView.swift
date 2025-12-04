@@ -22,7 +22,9 @@ struct AssignBorrowerView: View {
             Form {
                 Section("Pflichtangaben") {
                     TextField("Vorname", text: $borrower.firstName)
+                        .textInputAutocapitalization(.words)
                     TextField("Nachname", text: $borrower.lastName)
+                        .textInputAutocapitalization(.words)
                 }
                 
                 Section("Kontakt (optional)") {
@@ -110,7 +112,17 @@ struct AssignBorrowerView: View {
             address = Address(street: trimmedStreet, zipCode: trimmedZIPCode, city: trimmedCity, country: trimmedCountry)
         }
           
-        item.debtor = Borrower(firstName: trimmedFirstName, lastName: trimmedLastName, phoneNumber: trimmedPhoneNumber, email: trimmedEMail, address: address)
+        item.debtor.append(
+            Borrower(
+                firstName: trimmedFirstName,
+                lastName: trimmedLastName,
+                phoneNumber: trimmedPhoneNumber,
+                email: trimmedEMail,
+                address: address
+            )
+        )
+        
+        item.isBorrowed = true
         
         try? modelContext.save()
         
@@ -123,7 +135,7 @@ struct AssignBorrowerView: View {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: Borrower.self, configurations: config)
         let example = Borrower(firstName: "", lastName: "")
-        return AssignBorrowerView(item: Item(name: "Kneifzange", debtor: example))
+        return AssignBorrowerView(item: Item(name: "Kneifzange", debtor: [example]))
             .modelContainer(container)
     } catch {
         return Text("Failed to create preview: \(error.localizedDescription)")

@@ -19,6 +19,8 @@ class Borrower {
     var address: Address?
     var dateOfBorrowing: Date
     
+    var borrowedItemDetails: String?
+    
     init(firstName: String, lastName: String, phoneNumber: String? = nil, email: String? = nil, address: Address? = nil) {
         self.firstName = firstName
         self.lastName = lastName

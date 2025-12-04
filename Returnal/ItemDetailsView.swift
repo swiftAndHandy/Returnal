@@ -66,7 +66,7 @@ struct ItemDetailsView: View {
                 } else {
                     HStack {
                         Text(item.details ?? "Keine Beschreibung verfügbar.")
-                        if item.debtor == nil {
+                        if !item.isBorrowed {
                             Button {
                                 editModeisActice = true
                                 descriptionIsFocused = true
@@ -85,7 +85,7 @@ struct ItemDetailsView: View {
                 
                 Divider()
                 
-                if let debtor = item.debtor {
+                if item.isBorrowed, let debtor = item.debtor.last {
                     DebtorView(debtor: debtor, itemName: item.name)
                 }
             
@@ -119,10 +119,10 @@ struct ItemDetailsView: View {
         .scrollBounceBehavior(.basedOnSize)
         .toolbar {
             ToolbarItem {
-                switch isBorrowed() {
+                switch item.isBorrowed {
                     case true:
                     Button {
-                        item.debtor = nil
+                        item.isBorrowed = false
                         try? modelContext.save()
                     } label: {
                         HStack(spacing: 4) {
@@ -157,7 +157,7 @@ struct ItemDetailsView: View {
                 .padding(4)
         }
         .buttonStyle(.borderedProminent)
-        .disabled(item.debtor != nil)
+        .disabled(item.isBorrowed)
         .alert("Gegenstand wirklich löschen?", isPresented: $showDeleteConfirmation) {
             Button("Abbrechen", role: .cancel) { }
             Button("Ja, löschen", role: .destructive) {
@@ -176,9 +176,6 @@ struct ItemDetailsView: View {
         self.newDescription = item.details ?? ""
     }
     
-    func isBorrowed() -> Bool {
-        item.debtor != nil
-    }
 }
 
 #Preview {

@@ -13,14 +13,18 @@ class Item: Identifiable {
     var id: UUID
     var name: String
     var details: String?
-    @Relationship(deleteRule: .cascade) var debtor: Borrower?
+    var isBorrowed: Bool
+    
+    @Relationship(deleteRule: .cascade) var debtor: [Borrower]
     
     var qrCodeNeverScanned: Bool = true
     
-    init(name: String, details: String? = nil, debtor: Borrower? = nil) {
+    init(name: String, details: String? = nil, debtor: [Borrower] = []) {
         self.id = UUID()
         self.name = name
         self.details = details
         self.debtor = debtor
+        
+        self.isBorrowed = debtor.isEmpty ? false : true
     }
 }
