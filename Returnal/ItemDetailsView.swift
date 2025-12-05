@@ -160,7 +160,7 @@ struct ItemDetailsView: View {
             AssignBorrowerView(item: item)
         }
         .sheet(isPresented: $borrowerHistoryIsPresented) {
-            BorrowerHistoryView(item.debtors)
+            BorrowerHistoryView(for: item)
         }
         Button(role: .destructive) {
             showDeleteConfirmation = true

@@ -19,12 +19,12 @@ class Item: Identifiable {
     
     var qrCodeNeverScanned: Bool = true
     
-    init(name: String, details: String? = nil, debtor: [Borrower] = []) {
+    init(name: String, details: String? = nil, debtors: [Borrower] = []) {
         self.id = UUID()
         self.name = name
         self.details = details
-        self.debtors = debtor
+        self.debtors = debtors
         
-        self.isBorrowed = debtor.isEmpty ? false : true
+        self.isBorrowed = debtors.isEmpty ? false : true
     }
 }

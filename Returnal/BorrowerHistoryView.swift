@@ -8,16 +8,20 @@
 import SwiftUI
 
 struct BorrowerHistoryView: View {
-    var borrowers: [Borrower]
+    var item: Item
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ScrollView {
+            ForEach(item.debtors, id: \.self) { borrower in
+                Text(borrower.firstName)
+            }
+        }
     }
     
-    init (_ borrowers: [Borrower]) {
-        self.borrowers = borrowers
+    init (for item: Item) {
+        self.item = item
     }
 }
 
 #Preview {
-    BorrowerHistoryView([])
+    BorrowerHistoryView(for: Item(name: "Trittleiter", debtors: []))
 }
