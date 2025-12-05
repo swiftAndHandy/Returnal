@@ -15,7 +15,7 @@ class Item: Identifiable {
     var details: String?
     var isBorrowed: Bool
     
-    @Relationship(deleteRule: .cascade) var debtor: [Borrower]
+    @Relationship(deleteRule: .cascade) var debtors: [Borrower]
     
     var qrCodeNeverScanned: Bool = true
     
@@ -23,7 +23,7 @@ class Item: Identifiable {
         self.id = UUID()
         self.name = name
         self.details = details
-        self.debtor = debtor
+        self.debtors = debtor
         
         self.isBorrowed = debtor.isEmpty ? false : true
     }

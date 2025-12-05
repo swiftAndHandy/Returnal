@@ -112,7 +112,7 @@ struct AssignBorrowerView: View {
             address = Address(street: trimmedStreet, zipCode: trimmedZIPCode, city: trimmedCity, country: trimmedCountry)
         }
           
-        item.debtor.append(
+        item.debtors.append(
             Borrower(
                 firstName: trimmedFirstName,
                 lastName: trimmedLastName,

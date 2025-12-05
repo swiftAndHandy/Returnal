@@ -12,6 +12,7 @@ import SwiftUI
 struct ItemDetailsView: View {
     @Bindable private var item: Item
     @State private var burrowSheetIsPresented: Bool = false
+    @State private var borrowerHistoryIsPresented: Bool = false
     @State private var editModeisActice: Bool = false
     @State private var showDeleteConfirmation: Bool = false
     @FocusState private var descriptionIsFocused: Bool
@@ -85,7 +86,7 @@ struct ItemDetailsView: View {
                 
                 Divider()
                 
-                if item.isBorrowed, let debtor = item.debtor.last {
+                if item.isBorrowed, let debtor = item.debtors.last {
                     DebtorView(debtor: debtor, itemName: item.name)
                 }
             
@@ -118,7 +119,7 @@ struct ItemDetailsView: View {
         }
         .scrollBounceBehavior(.basedOnSize)
         .toolbar {
-            ToolbarItem {
+               ToolbarItem {
                 switch item.isBorrowed {
                     case true:
                     Button {
@@ -145,11 +146,22 @@ struct ItemDetailsView: View {
                     }
                 }
             }
+            ToolbarItem {
+                if historyIsEnabled() {
+                    Button {
+                        borrowerHistoryIsPresented = true
+                    } label: {
+                        Label("Vergangene Entleiher anzeigen", systemImage: "clock.arrow.trianglehead.counterclockwise.rotate.90")
+                    }
+                }
+            }
         }
         .sheet(isPresented: $burrowSheetIsPresented) {
             AssignBorrowerView(item: item)
         }
-        
+        .sheet(isPresented: $borrowerHistoryIsPresented) {
+            BorrowerHistoryView(item.debtors)
+        }
         Button(role: .destructive) {
             showDeleteConfirmation = true
         } label: {
@@ -176,6 +188,9 @@ struct ItemDetailsView: View {
         self.newDescription = item.details ?? ""
     }
     
+    func historyIsEnabled() -> Bool {
+        return (!item.debtors.isEmpty && !item.isBorrowed) || item.debtors.count >= 2
+    }
 }
 
 #Preview {
