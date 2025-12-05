@@ -124,6 +124,7 @@ struct ItemDetailsView: View {
                     case true:
                     Button {
                         item.isBorrowed = false
+                        item.debtors.last?.dateOfReturning = Date.now
                         try? modelContext.save()
                     } label: {
                         HStack(spacing: 4) {

@@ -18,6 +18,7 @@ class Borrower {
     
     var address: Address?
     var dateOfBorrowing: Date
+    var dateOfReturning: Date?
     
     var borrowedItemDetails: String?
     
