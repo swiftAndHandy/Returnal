@@ -25,12 +25,14 @@ struct BorrowerHistoryView: View {
                                 }
                                 let returnDate = borrower.dateOfReturning?.formatted(date: .long, time: .omitted) ?? "ausstehend"
                                     Text("Rückgabe am: \(returnDate)")
-                                if let description = item.details {
-                                    Text("""
-                                    Beschreibung: 
-                                    \(description)
-                                    """)
-                                    .padding(.top)
+                                if let description = borrower.borrowedItemDetails {
+                                    if !description.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                                        Text("""
+                                        Beschreibung: 
+                                        \(description)
+                                        """)
+                                        .padding(.top)
+                                    }
                                 }
                                 if index < sortedDebtors.count - 1 {
                                     Divider()

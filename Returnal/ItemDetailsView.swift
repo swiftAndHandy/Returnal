@@ -49,8 +49,10 @@ struct ItemDetailsView: View {
                             .buttonStyle(.plain)
                             
                             Button(role: .confirm) {
-                                item.details = newDescription
-                                try? modelContext.save()
+                                if newDescription.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
+                                    item.details = newDescription
+                                    try? modelContext.save()
+                                }
                                 editModeisActice = false
                                 descriptionIsFocused = false
                             } label: {

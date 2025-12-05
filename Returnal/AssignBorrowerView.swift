@@ -104,6 +104,8 @@ struct AssignBorrowerView: View {
         let trimmedCity = borrower.address?.city?.trimmingCharacters(in: .whitespaces)
         let trimmedCountry = borrower.address?.country?.trimmingCharacters(in: .whitespaces)
         
+        let trimmedItemDetails = item.details?.trimmingCharacters(in: .whitespacesAndNewlines)
+        
         var address: Address?
         
         if trimmedStreet == nil && trimmedZIPCode == nil && trimmedCity == nil && trimmedCountry == nil {
@@ -118,7 +120,8 @@ struct AssignBorrowerView: View {
                 lastName: trimmedLastName,
                 phoneNumber: trimmedPhoneNumber,
                 email: trimmedEMail,
-                address: address
+                address: address,
+                borrowedItemDetails: trimmedItemDetails
             )
         )
         

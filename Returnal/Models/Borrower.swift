@@ -22,12 +22,13 @@ class Borrower {
     
     var borrowedItemDetails: String?
     
-    init(firstName: String, lastName: String, phoneNumber: String? = nil, email: String? = nil, address: Address? = nil) {
+    init(firstName: String, lastName: String, phoneNumber: String? = nil, email: String? = nil, address: Address? = nil, borrowedItemDetails: String? = nil) {
         self.firstName = firstName
         self.lastName = lastName
         self.address = address
         self.dateOfBorrowing = .now
         self.phoneNumber = phoneNumber
         self.email = email
+        self.borrowedItemDetails = borrowedItemDetails
     }
 }
