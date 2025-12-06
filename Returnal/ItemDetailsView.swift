@@ -48,20 +48,37 @@ struct ItemDetailsView: View {
                             }
                             .buttonStyle(.plain)
                             
-                            Button(role: .confirm) {
-                                if newDescription.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
-                                    item.details = newDescription
-                                    try? modelContext.save()
+                            if #available(iOS 26.0, *) {
+                                Button(role: .confirm) {
+                                    if newDescription.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
+                                        item.details = newDescription
+                                        try? modelContext.save()
+                                    }
+                                    editModeisActice = false
+                                    descriptionIsFocused = false
+                                } label: {
+                                    Label("Speichern", systemImage: "checkmark.circle")
+                                        .labelStyle(.iconOnly)
+                                        .font(.system(size: 20))
+                                        .foregroundStyle(.green)
                                 }
-                                editModeisActice = false
-                                descriptionIsFocused = false
-                            } label: {
-                                Label("Speichern", systemImage: "checkmark.circle")
-                                    .labelStyle(.iconOnly)
-                                    .font(.system(size: 20))
-                                    .foregroundStyle(.green)
+                                .buttonStyle(.plain)
+                            } else {
+                                Button {
+                                    if newDescription.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
+                                        item.details = newDescription
+                                        try? modelContext.save()
+                                    }
+                                    editModeisActice = false
+                                    descriptionIsFocused = false
+                                } label: {
+                                    Label("Speichern", systemImage: "checkmark.circle")
+                                        .labelStyle(.iconOnly)
+                                        .font(.system(size: 20))
+                                        .foregroundStyle(.green)
+                                }
+                                .buttonStyle(.plain)
                             }
-                            .buttonStyle(.plain)
                             
                         }
                     }

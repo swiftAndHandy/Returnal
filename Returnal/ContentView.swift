@@ -62,8 +62,14 @@ struct ContentView: View {
             }
             .alert("Ungescannte QR-Codes drucken?", isPresented: $showMultiPrintAlert) {
                 Button("Abbrechen", role: .cancel) {}
-                Button("Ja, fortfahren.", role: .confirm) {
-                    printUnscannedCodes()
+                if #available(iOS 26.0, *) {
+                    Button("Ja, fortfahren.", role: .confirm) {
+                        printUnscannedCodes()
+                    }
+                } else {
+                    Button("Ja, fortfahren.") {
+                        printUnscannedCodes()
+                    }
                 }
                 
             } message: {

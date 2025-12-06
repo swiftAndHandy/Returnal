@@ -18,8 +18,13 @@ struct DebtorView: View {
                 VStack(alignment: .leading) {
                     Text("Verliehen an:")
                         .font(.caption)
-                    Text("\(debtor.firstName) \(debtor.lastName)")
-                        .font(.default.bold())
+                    if #available(iOS 26.0, *) {
+                        Text("\(debtor.firstName) \(debtor.lastName)")
+                            .font(.default.bold())
+                    } else {
+                        Text("\(debtor.firstName) \(debtor.lastName)")
+                            .font(.system(.headline, weight: .bold))
+                    }
                     if let address = debtor.address {
                         Text("\(address.street ?? "")")
                             .font(.subheadline)
