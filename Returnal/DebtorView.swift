@@ -43,6 +43,11 @@ struct DebtorView: View {
                     Text("Verliehen am:")
                         .font(.caption)
                     Text("\(debtor.dateOfBorrowing.formatted(date: .long, time: .omitted))")
+                    Text("Rückgabe bis:")
+                        .padding(.top, 2)
+                        .font(.caption)
+                    Text("\(debtor.promissedDateOfReturning?.formatted(date: .long, time: .omitted) ?? "unbefristet")")
+                        .foregroundStyle(debtor.promissedDateOfReturning.isExceeded ? .red : .primary)
                 }
             }
             if debtor.email != nil || debtor.phoneNumber != nil {

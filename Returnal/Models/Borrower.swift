@@ -19,10 +19,11 @@ class Borrower {
     var address: Address?
     var dateOfBorrowing: Date
     var dateOfReturning: Date?
+    var promissedDateOfReturning: Date?
     
     var borrowedItemDetails: String?
     
-    init(firstName: String, lastName: String, phoneNumber: String? = nil, email: String? = nil, address: Address? = nil, borrowedItemDetails: String? = nil) {
+    init(firstName: String, lastName: String, phoneNumber: String? = nil, email: String? = nil, address: Address? = nil, borrowedItemDetails: String? = nil, promissedDateOfReturning: Date? = nil) {
         self.firstName = firstName
         self.lastName = lastName
         self.address = address
@@ -30,5 +31,6 @@ class Borrower {
         self.phoneNumber = phoneNumber
         self.email = email
         self.borrowedItemDetails = borrowedItemDetails
+        self.promissedDateOfReturning = promissedDateOfReturning
     }
 }

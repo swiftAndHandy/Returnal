@@ -23,8 +23,11 @@ struct BorrowerHistoryView: View {
                                 HStack {
                                     Text("Entliehen am: \(borrower.dateOfBorrowing.formatted(date: .long, time: .omitted))")
                                 }
+                                
                                 let returnDate = borrower.dateOfReturning?.formatted(date: .long, time: .omitted) ?? "ausstehend"
-                                    Text("Rückgabe am: \(returnDate)")
+                                
+                                Text("Rückgabe am: \(returnDate)")
+                                
                                 if let description = borrower.borrowedItemDetails {
                                     if !description.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                                         Text("""
@@ -34,6 +37,23 @@ struct BorrowerHistoryView: View {
                                         .padding(.top)
                                     }
                                 }
+                                
+                                let promissedReturnDate = borrower.promissedDateOfReturning?.formatted(date: .long, time: .omitted) ?? nil
+                                if let endDate = promissedReturnDate {
+                                    Text("Rückgabe bis: \(endDate)")
+//                                        .foregroundStyle(checkDeadlineExpiration(borrower: borrower))
+                                }
+                                
+                                if let description = borrower.borrowedItemDetails {
+                                    if !description.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                                        Text("""
+                                        Beschreibung: 
+                                        \(description)
+                                        """)
+                                        .padding(.top)
+                                    }
+                                }
+                                
                                 if index < sortedDebtors.count - 1 {
                                     Divider()
                                 }
@@ -56,8 +76,21 @@ struct BorrowerHistoryView: View {
         self.item = item
         self.sortedDebtors = item.debtors.sorted(by: { $0.dateOfBorrowing > $1.dateOfBorrowing })
     }
+    
+    func checkDeadlineExpiration(borrower: Borrower) -> Color {
+        guard let dateOfReturning = borrower.dateOfReturning else {
+            return .primary
+        }
+        
+        let exceeded = borrower.promissedDateOfReturning.isExceeded(comparedTo: dateOfReturning)
+        
+        if exceeded {
+            return .red
+        }
+        return .primary
+    }
 }
 
 #Preview {
-    BorrowerHistoryView(for: Item(name: "Trittleiter", debtors: [Borrower(firstName: "Simon", lastName: "Müller"), Borrower(firstName: "Klaus", lastName: "Weber", phoneNumber: "0564646464", email: "klaus@weber")]))
+    BorrowerHistoryView(for: Item(name: "Trittleiter", debtors: [Borrower(firstName: "Simon", lastName: "Müller"), ]))
 }

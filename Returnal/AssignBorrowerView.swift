@@ -5,6 +5,7 @@
 //  Created by Andre Veltens on 01.12.25.
 //
 
+import Contacts
 import SwiftData
 import SwiftUI
 
@@ -15,11 +16,31 @@ struct AssignBorrowerView: View {
     @Bindable var item: Item
     
     @State private var borrower: Borrower = Borrower(firstName: "", lastName: "", address: Address())
+    @State private var showContactPicker = false
+    @State private var returningDate: Date = Calendar.current.date(byAdding: .day, value: 7, to: Date())!
+    @State private var returningDateIsSet: Bool = false
     
     
     var body: some View {
         NavigationStack {
             Form {
+                Section("Rückgabevereinbarung:") {
+                    HStack {
+                        Text("Rückgabedatum festlegen?")
+                        Spacer()
+                        Toggle("Rückgabe geplant", isOn: $returningDateIsSet)
+                            .labelsHidden()
+                    }
+                    if returningDateIsSet {
+                        DatePicker(
+                            "Rückgabedatum",
+                            selection: $returningDate,
+                            in: Date()...,
+                            displayedComponents: [.date]
+                                )
+                        .datePickerStyle(.compact)
+                    }
+                }
                 Section("Pflichtangaben") {
                     TextField("Vorname", text: $borrower.firstName)
                         .textInputAutocapitalization(.words)
@@ -84,6 +105,46 @@ struct AssignBorrowerView: View {
                     }
                     .disabled(saveDisabled())
                 }
+                ToolbarItem(placement: .bottomBar) {
+                    VStack {
+                        Button {
+                            showContactPicker = true
+                        } label: {
+                            HStack {
+                                Image(systemName: "person.crop.circle.badge.plus")
+                                Text("Kontakt auswählen")
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
+                        .sheet(isPresented: $showContactPicker) {
+                            ContactPickerView { contact in
+                                borrower.firstName = contact.givenName
+                                borrower.lastName = contact.familyName
+                                
+                                if let phoneNumber = contact.phoneNumbers.first?.value as? CNPhoneNumber {
+                                    borrower.phoneNumber = phoneNumber.stringValue
+                                } else {
+                                    borrower.phoneNumber = nil
+                                }
+                                
+                                if let emailAddress = contact.emailAddresses.first?.value as? String {
+                                    borrower.email = emailAddress
+                                } else {
+                                    borrower.email = nil
+                                }
+                                
+                                if let postal = contact.postalAddresses.first?.value {
+                                    borrower.address?.street = postal.street
+                                    borrower.address?.city = postal.city
+                                    borrower.address?.zipCode = postal.postalCode
+                                    borrower.address?.country = postal.country
+                                } else {
+                                    borrower.address = nil
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -121,7 +182,8 @@ struct AssignBorrowerView: View {
                 phoneNumber: trimmedPhoneNumber,
                 email: trimmedEMail,
                 address: address,
-                borrowedItemDetails: trimmedItemDetails
+                borrowedItemDetails: trimmedItemDetails,
+                promissedDateOfReturning: returningDateIsSet ? returningDate : nil
             )
         )
         
