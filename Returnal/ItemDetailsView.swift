@@ -85,7 +85,7 @@ struct ItemDetailsView: View {
                     .padding(.vertical, 2)
                 } else {
                     HStack {
-                        Text(item.details ?? "Keine Beschreibung verfügbar.")
+                        Text(item.details ?? String(localized: .descriptionUnavailable))
                         if !item.isBorrowed {
                             Button {
                                 editModeisActice = true
