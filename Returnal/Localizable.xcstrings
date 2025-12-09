@@ -1,0 +1,315 @@
+{
+  "sourceLanguage" : "de",
+  "strings" : {
+    "%@" : {
+
+    },
+    "%@ %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@"
+          }
+        }
+      }
+    },
+    "Abbrechen" : {
+
+    },
+    "Adresse (optional)" : {
+
+    },
+    "Bearbeiten" : {
+
+    },
+    "Beschreibung: \n%@" : {
+
+    },
+    "Der aktuelle Filter liefert keine Ergebnisse." : {
+
+    },
+    "Dieser Vorgang kann nicht rückgängig gemacht werden." : {
+
+    },
+    "E-Mail" : {
+
+    },
+    "E-Mail:" : {
+
+    },
+    "Entleiher zuweisen" : {
+
+    },
+    "Entleihverlauf für %@" : {
+
+    },
+    "Entliehen am: %@" : {
+
+    },
+    "Ergänzende Angaben" : {
+
+    },
+    "Erhalt bestätigen" : {
+
+    },
+    "Filter" : {
+
+    },
+    "Füge deinen ersten Gegenstand hinzu." : {
+
+    },
+    "Gegenstand löschen" : {
+
+    },
+    "Gegenstand wirklich löschen?" : {
+
+    },
+    "Ja, fortfahren." : {
+
+    },
+    "Ja, löschen" : {
+
+    },
+    "Keine Einträge vorhanden" : {
+
+    },
+    "Keine Suchergebnisse" : {
+
+    },
+    "Konfiguration:" : {
+
+    },
+    "Kontakt (optional)" : {
+
+    },
+    "Kontakt auswählen" : {
+
+    },
+    "Land" : {
+
+    },
+    "Nachname" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last name"
+          }
+        }
+      }
+    },
+    "Name des Gegenstands" : {
+
+    },
+    "Neuer Gegenstand" : {
+
+    },
+    "Ort" : {
+
+    },
+    "Pflichtangaben" : {
+
+    },
+    "PLZ" : {
+
+    },
+    "QR-Code Druck" : {
+
+    },
+    "QR-Code drucken" : {
+
+    },
+    "Rückgabe" : {
+
+    },
+    "Rückgabe am: %@" : {
+
+    },
+    "Rückgabe bis:" : {
+
+    },
+    "Rückgabe bis: %@" : {
+
+    },
+    "Rückgabe geplant" : {
+
+    },
+    "Rückgabedatum" : {
+
+    },
+    "Rückgabedatum festlegen?" : {
+
+    },
+    "Rückgabevereinbarung:" : {
+
+    },
+    "Soll ein Dokument erstellt werden, dass alle ungescannten Barcodes enthält?" : {
+
+    },
+    "Speichern" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save"
+          }
+        }
+      }
+    },
+    "Straße" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Street"
+          }
+        }
+      }
+    },
+    "Suche Gegenstand" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search item"
+          }
+        }
+      }
+    },
+    "Telefon" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Phone"
+          }
+        }
+      }
+    },
+    "Telefon:" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Phone:"
+          }
+        }
+      }
+    },
+    "Tippe hier, um einen Entleiher festzulegen." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap here, to select a borrower."
+          }
+        }
+      }
+    },
+    "Tippe hier, wenn der Gegenstand zurückgegeben wurde." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap here, if the item is returned."
+          }
+        }
+      }
+    },
+    "Übersicht" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overview"
+          }
+        }
+      }
+    },
+    "ungescannt" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "unscanned"
+          }
+        }
+      }
+    },
+    "Ungescannte QR-Codes drucken?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Print unscanned QR-Codes?"
+          }
+        }
+      }
+    },
+    "Vergangene Entleiher anzeigen" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Display borrower history"
+          }
+        }
+      }
+    },
+    "Verleihen" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Borrow"
+          }
+        }
+      }
+    },
+    "verliehen" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "borrowed"
+          }
+        }
+      }
+    },
+    "Verliehen am:" : {
+
+    },
+    "Verliehen an:" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Borrowed to: "
+          }
+        }
+      }
+    },
+    "Verwerfen" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Discard"
+          }
+        }
+      }
+    },
+    "Vorname" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "First name"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.1"
+}
