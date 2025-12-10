@@ -5,13 +5,18 @@
 //  Created by Andre Veltens on 01.12.25.
 //
 
+import StoreKit
 import SwiftData
 import SwiftUI
 
 struct ContentView: View {
+    @AppStorage("scanCount") var scanCount: Int = 0
+    
+    @Environment(\.requestReview) private var requestReview
     @Environment(\.modelContext) private var modelContext
-    @EnvironmentObject private var router: DeepLinkRouter
     @Environment(\.colorScheme) private var colorScheme
+    
+    @EnvironmentObject private var router: DeepLinkRouter
     
     @FocusState private var searchFieldIsFocused: Bool
     
@@ -20,6 +25,8 @@ struct ContentView: View {
     @State private var searchQuery: String = ""
     
     @State private var showMultiPrintAlert: Bool = false
+    
+    @StateObject private var purchaseService = PurchaseService()
     
     @Query(sort: [
         SortDescriptor(\Item.name)
@@ -90,6 +97,10 @@ struct ContentView: View {
                             try? modelContext.save()
                         }
                         qrCodePath.append(match)
+                        scanCount += 1;
+                        if scanCount == 5 || scanCount == 10 {
+                            requestReview()
+                        }
                         router.targetUUID = nil
                     }
                 }
@@ -129,16 +140,28 @@ struct ContentView: View {
                 }
             }
             .sheet(isPresented: $addItemIsPresented) {
-                AddItemView { newItem in
-                    qrCodePath = []
-                    qrCodePath.append(newItem)
+                if canAddItem() {
+                    AddItemView { newItem in
+                        qrCodePath = []
+                        qrCodePath.append(newItem)
+                    }
+                } else {
+                    UpgradeToProView()
                 }
             }
         }
+        .environmentObject(purchaseService)
     }
     
     func printUnscannedCodes() {
         QRCode.printCodes(items: unscannedItems, size: 50)
+    }
+    
+    func canAddItem() -> Bool {
+        if items.count < 10 {
+            return true
+        }
+        return purchaseService.isProUnlocked
     }
 }
 

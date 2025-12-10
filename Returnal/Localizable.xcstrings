@@ -35,6 +35,9 @@
         }
       }
     },
+    "Basis-Version nutzen" : {
+
+    },
     "Bearbeiten" : {
       "localizations" : {
         "en" : {
@@ -81,6 +84,9 @@
           }
         }
       }
+    },
+    "Die Basis-Version von Returnal unterstützt die Verwaltung von bis zu 10 Gegenständen.\n\nDie Pro-Version ist gegen eine geringe Einmalzahlung erhältlich. " : {
+
     },
     "Dieser Vorgang kann nicht rückgängig gemacht werden." : {
       "localizations" : {
@@ -222,6 +228,9 @@
         }
       }
     },
+    "Kauf wiederherstellen" : {
+
+    },
     "Keine Einträge vorhanden" : {
       "localizations" : {
         "en" : {
@@ -281,6 +290,9 @@
           }
         }
       }
+    },
+    "Mehr gibt's mit Returnal Pro" : {
+
     },
     "Nachname" : {
       "localizations" : {
@@ -361,6 +373,9 @@
           }
         }
       }
+    },
+    "Returnal Pro kaufen" : {
+
     },
     "Rückgabe" : {
       "localizations" : {

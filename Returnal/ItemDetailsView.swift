@@ -5,22 +5,30 @@
 //  Created by Andre Veltens on 01.12.25.
 //
 
+import StoreKit
 import SwiftData
 import SwiftUI
 
 
 struct ItemDetailsView: View {
+    @AppStorage("scanCount") var scanCount: Int = 0
+    @AppStorage("returnedItemsCount") var returnedItemsCount = 0
+    
     @Bindable private var item: Item
+    
+    @Environment(\.dismiss) var dismiss
+    @Environment(\.requestReview) var requestReview
+    @Environment(\.modelContext) var modelContext
+    
+    @FocusState private var descriptionIsFocused: Bool
+    
     @State private var burrowSheetIsPresented: Bool = false
     @State private var borrowerHistoryIsPresented: Bool = false
     @State private var editModeisActice: Bool = false
     @State private var showDeleteConfirmation: Bool = false
-    @FocusState private var descriptionIsFocused: Bool
     
     @State var newDescription: String
     
-    @Environment(\.modelContext) var modelContext
-    @Environment(\.dismiss) var dismiss
     
     var body: some View {
         ScrollView {
@@ -145,6 +153,12 @@ struct ItemDetailsView: View {
                         item.isBorrowed = false
                         item.debtors.last?.dateOfReturning = Date.now
                         try? modelContext.save()
+                        
+                        returnedItemsCount += 1
+                        
+                        if returnedItemsCount >= 6 && returnedItemsCount % 3 == 0 {
+                            requestReview()
+                        }
                     } label: {
                         HStack(spacing: 4) {
                             Text("Erhalt bestätigen")
