@@ -35,9 +35,6 @@
         }
       }
     },
-    "Basis-Version nutzen" : {
-
-    },
     "Bearbeiten" : {
       "localizations" : {
         "en" : {
@@ -229,7 +226,14 @@
       }
     },
     "Kauf wiederherstellen" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restore purchase"
+          }
+        }
+      }
     },
     "Keine Einträge vorhanden" : {
       "localizations" : {
@@ -290,9 +294,6 @@
           }
         }
       }
-    },
-    "Mehr gibt's mit Returnal Pro" : {
-
     },
     "Nachname" : {
       "localizations" : {
@@ -374,8 +375,34 @@
         }
       }
     },
-    "Returnal Pro kaufen" : {
+    "Returnal Basic weiter nutzen" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Returnal-Basic weiternutzen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue using Returnal-Basic"
+          }
+        }
+      }
+    },
+    "Returnal Pro freischalten" : {
 
+    },
+    "Returnal Pro kaufen" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buy Returnal Pro"
+          }
+        }
+      }
     },
     "Rückgabe" : {
       "localizations" : {
@@ -520,9 +547,21 @@
     "Tippe hier, um einen Entleiher festzulegen." : {
       "localizations" : {
         "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tap here, to select a borrower."
+          "variations" : {
+            "device" : {
+              "mac" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Click here, to select a borrower."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Tap here, to select a borrower."
+                }
+              }
+            }
           }
         }
       }

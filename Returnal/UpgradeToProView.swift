@@ -39,7 +39,7 @@ struct UpgradeToProView: View {
                 } label: {
                     HStack {
                         Image(systemName: "cart.fill")
-                        Text("Jetzt kaufen")
+                        Text("Returnal Pro kaufen")
                     }
                 }
                 .buttonStyle(.borderedProminent)
@@ -51,13 +51,13 @@ struct UpgradeToProView: View {
                 }
                 
                 if #available(iOS 26.0, *) {
-                    Button("Basis-Version weiter nutzen", role: .close) {
+                    Button("Returnal Basic weiter nutzen", role: .close) {
                         dismiss()
                     }
                     .foregroundStyle(.red)
                     .buttonStyle(.bordered)
                 } else {
-                    Button("Basis-Version weiter nutzen", role: .cancel) {
+                    Button("Returnal Basic weiter nutzen", role: .cancel) {
                         dismiss()
                     }
                     .foregroundStyle(.red)
