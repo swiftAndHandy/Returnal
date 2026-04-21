@@ -14,6 +14,12 @@ Dank Returnal weißt du immer, wo dein Zeug ist.
 5. Wenn du den Gegenstand zurückbekommst, scannst du den QR-Code erneut und bestätigst seine Rückkehr.
 
 ## Features 
+### Entleiher-Protokoll
+Wer hatte das Objekt von wann bis wann entliehen?
+
+### Entleiher aus den Apple Contacts übertragen
+Entleiher können händisch eingefügt, oder aus den Apple Kontakten übernommen werden. 
+
 ### Filter
 Selbstverständlich kannst du deine Gegenstände filtern. So siehst du auf einen Blick, welche
 <ol>
@@ -27,11 +33,9 @@ Du kannst jedem Gegenstand eine Beschreibung hinzufügen. Diese kann nur dann be
 
 ## Ideen zur Erweiterung:
 <ul>
-    <li>Entleiher-Protokoll - wer hatte das Objekt von wann bis wann entliehen?</li>
-    <li>Beschreibungs-Protokoll - welche Änderungen an der Beschreibung wurden wann vorgenommen?</li>
-    <li>Entleiher aus den Apple Contacts übertragen</li>
     <li>Fotos von Gegenständen hinzufügen</li>
     <li>ISBN-Code-Scanner um Medientitel beim Anlegen neuer Items zu übertragen</li>
+    <li>Eignes Backend, damit QR-Codes von Fremden dem Eigentümer zugewiesen werden können</li>
 </ul>         
 
 ## Wieso heißt Returnal eigentlich Returnal?
